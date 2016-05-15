@@ -88,6 +88,7 @@ public abstract class AlgoritmosGeneticos {
     O genotipo eh convertido em fenotipo dentro do metodo
     |-----------------*/
     protected abstract double fitness(int[] genotipo);
+    protected abstract double fitnessAntigo(int[] genotipo);
     
     /*-----------------|
     Calcula o fitness total de toda a populacao

@@ -14,24 +14,9 @@ import java.util.ArrayList;
  * @author sousa
  */
 public class Routes extends AlgoritmosGeneticos {
-    
-    
-    
-        /*
-        //Passar os parametros
-                rastr.numGenes = Integer.valueOf(args[0]);
-		rastr.numIndividuos = Integer.valueOf(args[1]);
-		rastr.critParada = Integer.valueOf(args[2]);
-		rastr.numGeracoes = Integer.valueOf(args[3]);
-		rastr.numCross = (int)(Double.valueOf(args[4])*rastr.numIndividuos);
-		rastr.crossover = Integer.valueOf(args[5]) == 0? new CrossoverUmPonto() : new CrossoverDoisPontos();
-		rastr.probCrossover = Double.valueOf(args[6]);
-		rastr.mutacao = Integer.valueOf(args[7]) == 0 ? new MutacaoSimples() : new MutacaoTroca();
-		rastr.probMutacao = Double.valueOf(args[8]);
-		rastr.critTroca = Integer.valueOf(args[9]);
-		rastr.elitismo = Boolean.valueOf(args[10]);
-                rastr.intervaloImpressao = Integer.parseInt(args[11]);
-        */
+	
+	public double[][] mapaDistancias;
+	private static final int DEPOSITO = 0;
     
     public static void main(String[] args)
     {
@@ -69,9 +54,46 @@ public class Routes extends AlgoritmosGeneticos {
         
     }
     
+    protected double fitness(int[] genotipo)
+    {
+    	double distanciaPercorrida = 0;
+    	int anterior = -1;
+    	int atual = 0;
+    	
+    	for(int i = 1; i < genotipo.length; i++)
+    	{
+    		if(genotipo[i] == -1)
+    		{
+    			if(anterior!=-1)
+    			{
+    				distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
+    				anterior = -1;
+    			}
+    		}
+    		else
+    		{
+    			atual = genotipo[i]-1;
+    			if(anterior==-1)
+    			{
+    				distanciaPercorrida += this.mapaDistancias[DEPOSITO][atual];
+    				anterior = atual;
+    			}
+    			else
+    			{
+    				distanciaPercorrida += this.mapaDistancias[anterior][atual];
+    				anterior = atual;
+    			}
+    		}
+    	}
+    	
+    	if (genotipo[genotipo.length-1] != -1 && anterior != -1)
+    		distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
+    	
+    	return distanciaPercorrida;
+    }
     
     @Override
-    protected double fitness(int[] genotipo) {
+    protected double fitnessAntigo(int[] genotipo) {
         double distanciaPercorrida = 0;
         Cliente depot = this.clientes.get(0);
         
@@ -104,6 +126,21 @@ public class Routes extends AlgoritmosGeneticos {
         if(genotipo[genotipo.length-1] != -1 && anterior != null) distanciaPercorrida += anterior.distancia(depot);
         
         return distanciaPercorrida;
+    }
+    
+    //Criar um mapa de distâncias para evitar de ficar calculando as 
+    //distâncias toda hora
+    public void calcularDistancias()
+    {
+    	int i, j;
+    	this.mapaDistancias = new double[this.qtdClientes][this.qtdClientes];
+    	
+    	for(i = 0; i < mapaDistancias.length; i++)
+    		for(j = 0; j < mapaDistancias.length; j++)
+    			if(i==j)
+    				this.mapaDistancias[i][j] = 0;
+    			else
+    				this.mapaDistancias[i][j] = this.clientes.get(i).distancia(this.clientes.get(j));
     }
     
 }
