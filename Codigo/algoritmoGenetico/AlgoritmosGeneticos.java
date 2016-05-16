@@ -74,6 +74,9 @@ public abstract class AlgoritmosGeneticos {
     //Intervalo de impressao
     protected int intervaloImpressao;
     
+    //Mapa de Distâncias
+    protected double[][] mapaDistancias;
+    
     
     /*-----------------| Espaco dos Metodos |-----------------*/
     //Construtor -> Por enquanto so inicializa rand
@@ -106,6 +109,9 @@ public abstract class AlgoritmosGeneticos {
     geradorInicial -> Cria a primeira geracao baseado nos parametros
     |-----------------*/
     void geradorInicial() {
+    	//0) Antes de tudo popular o mapa de distâncias
+    	this.calcularDistancias();
+    	
         //1) Criar a primeira geracao
         this.geracao = new ArrayList(this.numIndividuos);
 
@@ -380,5 +386,20 @@ public abstract class AlgoritmosGeneticos {
         } catch (IOException ex) {
             Logger.getLogger(AlgoritmosGeneticos.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    //Criar um mapa de distâncias para evitar de ficar calculando as 
+    //distâncias toda hora
+    public void calcularDistancias()
+    {
+    	int i, j;
+    	this.mapaDistancias = new double[this.qtdClientes][this.qtdClientes];
+    	
+    	for(i = 0; i < mapaDistancias.length; i++)
+    		for(j = 0; j < mapaDistancias.length; j++)
+    			if(i==j)
+    				this.mapaDistancias[i][j] = 0;
+    			else
+    				this.mapaDistancias[i][j] = this.clientes.get(i).distancia(this.clientes.get(j));
     }
 }

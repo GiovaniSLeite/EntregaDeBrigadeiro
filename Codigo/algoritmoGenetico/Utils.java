@@ -15,17 +15,25 @@ public class Utils {
         ArrayList<Cliente> clientes = new ArrayList();
         try {
             BufferedReader ler = new BufferedReader(new FileReader(new File(arq)));
+            
+            //Ler as primeiras três linhas
             int i = 3;
             while (i > 0) {
                 i--;
                 ler.readLine();
             }
+            
+            //Pegar quantidade de clientes depois do : da 4 linha
             int qtdClientes = Integer.valueOf(ler.readLine().split(":")[1].trim());
+            
+            //Ler as próximas três linhas
             i = 3;
             while (i > 0) {
                 i--;
                 ler.readLine();
             }
+            
+            //Ler as coordenadas dos qtdClientes clientes
             ArrayList<Integer> x = new ArrayList();
             ArrayList<Integer> y = new ArrayList();
             for (i = 0; i < qtdClientes; i++) {
@@ -35,6 +43,7 @@ public class Utils {
             }
             ler.readLine();
 
+            //Ler a demanda de cada cliente
             ArrayList<Integer> demand = new ArrayList();
 
             for (i = 0; i < qtdClientes; i++) {
@@ -42,15 +51,21 @@ public class Utils {
                 demand.add(Integer.valueOf(coord[1]));
             }
 
+            //Adicionar os clientes na estrutura específica
             for (i = 0; i < x.size(); i++) {
                 clientes.add(new Cliente(x.get(i), y.get(i), demand.get(i)));
             }
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        
+        //Retornar a lista de clientes
         return clientes;
     }
 
+    //Pegar a quantidade de caminhões necessários para solucionar o problema
+    //Esse método está pegando o número de caminhões da segunda linha do arquivo
     public static int getQtdRotas(String arq){
         int resp = 1;
         try {

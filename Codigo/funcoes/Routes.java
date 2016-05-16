@@ -8,6 +8,7 @@ package funcoes;
 import Operadores.*;
 import algoritmoGenetico.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -15,7 +16,6 @@ import java.util.ArrayList;
  */
 public class Routes extends AlgoritmosGeneticos {
 	
-	public double[][] mapaDistancias;
 	private static final int DEPOSITO = 0;
     
     public static void main(String[] args)
@@ -34,8 +34,8 @@ public class Routes extends AlgoritmosGeneticos {
         r.critTroca = Integer.valueOf(args[9]);
         r.elitismo = Boolean.valueOf(args[10]);
         r.intervaloImpressao = Integer.parseInt(args[11]);*/
-        r.qtdRotas = Utils.getQtdRotas("A-n32-k5.vrp");
-        r.clientes = Utils.getClientes("A-n32-k5.vrp");
+        r.qtdRotas = Utils.getQtdRotas("C:\\Users\\ctcca\\Documents\\USP\\5_Semestre\\IA\\Trabalhos\\EP_AlgoritmosGeneticos_Parte2\\EntregaDeBrigadeiro\\bin\\funcoes\\A-n33-k5.vrp");
+        r.clientes = Utils.getClientes("C:\\Users\\ctcca\\Documents\\USP\\5_Semestre\\IA\\Trabalhos\\EP_AlgoritmosGeneticos_Parte2\\EntregaDeBrigadeiro\\bin\\funcoes\\A-n33-k5.vrp");
         r.qtdClientes = r.clientes.size();
         r.capacidade = 100;
         r.numIndividuos = 20;
@@ -52,6 +52,37 @@ public class Routes extends AlgoritmosGeneticos {
         
         r.evolucao();
         
+        //Modelo de brinquedo
+        //r.qtdClientes = 10;
+        //r.qtdRotas = 3;
+        
+        //r.clientes.clear();
+        //r.clientes.add(new Cliente(0,9,0));
+        //r.clientes.add(new Cliente(1,8,2));
+        //r.clientes.add(new Cliente(2,7,18));
+        //r.clientes.add(new Cliente(3,6,4));
+        //r.clientes.add(new Cliente(4,5,16));
+        //r.clientes.add(new Cliente(5,4,6));
+        //r.clientes.add(new Cliente(6,3,14));
+        //r.clientes.add(new Cliente(7,2,8));
+        //r.clientes.add(new Cliente(8,1,12));
+        //r.clientes.add(new Cliente(9,0,10));
+        
+        //r.capacidade = 30;
+        
+        //r.calcularDistancias();
+        //int[] cromossomo = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
+        
+        //int[] cromossomo = {2, 4, 7, -1, 3, 6, 5, 8, 10, 9, -1};
+        //System.out.println(Arrays.toString(cromossomo));
+        //System.out.println();
+        //for(int i = 0; i<r.qtdClientes; i++)
+        //System.out.println(Arrays.toString(r.mapaDistancias[i]));
+        
+        //System.out.println();
+        
+        //System.out.println(r.fitness(cromossomo));
+        //System.out.println(r.fitnessAntigo(cromossomo));
     }
     
     protected double fitness(int[] genotipo)
@@ -126,21 +157,6 @@ public class Routes extends AlgoritmosGeneticos {
         if(genotipo[genotipo.length-1] != -1 && anterior != null) distanciaPercorrida += anterior.distancia(depot);
         
         return distanciaPercorrida;
-    }
-    
-    //Criar um mapa de distâncias para evitar de ficar calculando as 
-    //distâncias toda hora
-    public void calcularDistancias()
-    {
-    	int i, j;
-    	this.mapaDistancias = new double[this.qtdClientes][this.qtdClientes];
-    	
-    	for(i = 0; i < mapaDistancias.length; i++)
-    		for(j = 0; j < mapaDistancias.length; j++)
-    			if(i==j)
-    				this.mapaDistancias[i][j] = 0;
-    			else
-    				this.mapaDistancias[i][j] = this.clientes.get(i).distancia(this.clientes.get(j));
     }
     
 }
