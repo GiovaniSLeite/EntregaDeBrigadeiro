@@ -3,6 +3,7 @@ package algoritmoGenetico;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /*-----------------|Classe Utils|-----------------/
@@ -16,7 +17,7 @@ public class Utils {
         try {
             BufferedReader ler = new BufferedReader(new FileReader(new File(arq)));
             
-            //Ler as primeiras três linhas
+            //Ler as primeiras trÃªs linhas
             int i = 3;
             while (i > 0) {
                 i--;
@@ -26,7 +27,7 @@ public class Utils {
             //Pegar quantidade de clientes depois do : da 4 linha
             int qtdClientes = Integer.valueOf(ler.readLine().split(":")[1].trim());
             
-            //Ler as próximas três linhas
+            //Ler as prÃ³ximas trÃªs linhas
             i = 3;
             while (i > 0) {
                 i--;
@@ -51,21 +52,21 @@ public class Utils {
                 demand.add(Integer.valueOf(coord[1]));
             }
 
-            //Adicionar os clientes na estrutura específica
+            //Adicionar os clientes na estrutura especÃ­fica
             for (i = 0; i < x.size(); i++) {
                 clientes.add(new Cliente(x.get(i), y.get(i), demand.get(i)));
             }
             
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (IOException | NumberFormatException ex) {
+            System.out.println("GETCLIENTES: IO ou NumberFormat");
         }
         
         //Retornar a lista de clientes
         return clientes;
     }
 
-    //Pegar a quantidade de caminhões necessários para solucionar o problema
-    //Esse método está pegando o número de caminhões da segunda linha do arquivo
+    //Pegar a quantidade de caminhÃµes necessÃ¡rios para solucionar o problema
+    //Esse mÃ©todo estÃ¡ pegando o nÃºmero de caminhÃµes da segunda linha do arquivo
     public static int getQtdRotas(String arq){
         int resp = 1;
         try {
@@ -79,6 +80,46 @@ public class Utils {
         }
         
         return resp;
+    }
+    
+    
+    public static ArrayList<Integer> encontraRota(int[] genotipo, int posicao)
+    {
+        int cmc =0;
+        int fim = genotipo.length-1;
+        //Encontra o comeco da rota
+        for(int i = posicao; i>=0; i--)
+            if(genotipo[i] == -1){
+                cmc = i+1;
+                break;
+            }
+        
+        //Encontra o final da rota
+        for(int i = posicao+1; i < genotipo.length; i++)
+            if(genotipo[i] == -1){
+                fim = i-1;
+                break;
+            }
+        //Adiciona esses a uma lista
+        ArrayList<Integer> rota = new ArrayList();
+        for(int i = cmc; i <= fim; i++)
+            rota.add(genotipo[i]);
+        //Retorna a lista
+        return rota;
+    }
+    
+    public static int[] removeClientes(int[] genotipo, ArrayList<Integer> clientes)
+    {
+        int[] novoGenotipo = new int[genotipo.length - clientes.size()];
+        int nAdicionados =0;
+        for(int i =0; i < genotipo.length; i++)
+            if(!clientes.contains(genotipo[i]))
+                novoGenotipo[i-nAdicionados] = genotipo[i];
+            else
+                nAdicionados++;
+        
+        return novoGenotipo;          
+            
     }
 
 }

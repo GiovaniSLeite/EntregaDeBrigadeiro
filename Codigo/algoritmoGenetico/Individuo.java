@@ -25,7 +25,7 @@ public class Individuo implements Comparable<Individuo>{
     /*-----------------|
     Esse construtor cria um Individuo aleatorio
     |-----------------*/
-    //Esse mÈtodo foi adaptado para n„o gerar infactibilidade no cromossomo
+    //Esse m√©todo foi adaptado para n√£o gerar infactibilidade no cromossomo
     //Mas mantendo a aleatoriedade
     public static int[] cromossomoAleatorio(int nroRotas, int nroClientes)
     {

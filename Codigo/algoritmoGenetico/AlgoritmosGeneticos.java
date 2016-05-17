@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -74,7 +75,7 @@ public abstract class AlgoritmosGeneticos {
     //Intervalo de impressao
     protected int intervaloImpressao;
     
-    //Mapa de Dist‚ncias
+    //Mapa de Dist√¢ncias
     protected double[][] mapaDistancias;
     
     
@@ -109,8 +110,6 @@ public abstract class AlgoritmosGeneticos {
     geradorInicial -> Cria a primeira geracao baseado nos parametros
     |-----------------*/
     void geradorInicial() {
-    	//0) Antes de tudo popular o mapa de dist‚ncias
-    	this.calcularDistancias();
     	
         //1) Criar a primeira geracao
         this.geracao = new ArrayList(this.numIndividuos);
@@ -260,12 +259,12 @@ public abstract class AlgoritmosGeneticos {
         this.indGeracao = 1; //Numero da geracao
 
         // Iniciar a Evolucao
-        // A Evolucao ser√° um while true, cujo criterio de parada definira quando sair do laco
+        // A Evolucao ser√É¬° um while true, cujo criterio de parada definira quando sair do laco
         while (true) {
             //Ordena, em ordem crescente de fitness, os individuos
             Collections.sort(geracao); 
-            for(Individuo a : geracao)
-                System.out.println(a);
+            //for(Individuo a : geracao)
+            //    System.out.println(a);
             
             //Cria a copia adaptada da geracao que servira para a roleta
             criaGeracaoRoleta(); 
@@ -285,12 +284,13 @@ public abstract class AlgoritmosGeneticos {
                 if (this.rand.nextDouble() <= this.probCrossover) {
                     //a) Selecionar os pais
                     Individuo[] pais = roleta();
+
                     //b) Efetuar o cruzamento e gerar os filhos
                     int[][] filhos = crossover.executar(pais[0].getGenotipo(), pais[1].getGenotipo());
-                    
+
                     //c) Adicionar os filhos a lista
-                    proxFilhos.add(new Individuo(filhos[0], fitness(filhos[0])));
-                    proxFilhos.add(new Individuo(filhos[1], fitness(filhos[1])));
+                    for(int[] aux : filhos)
+                        proxFilhos.add(new Individuo(aux, fitness(aux)));
                 }
             }
 
@@ -388,8 +388,8 @@ public abstract class AlgoritmosGeneticos {
         }
     }
     
-    //Criar um mapa de dist‚ncias para evitar de ficar calculando as 
-    //dist‚ncias toda hora
+    //Criar um mapa de dist√¢ncias para evitar de ficar calculando as 
+    //dist√¢ncias toda hora
     public void calcularDistancias()
     {
     	int i, j;
