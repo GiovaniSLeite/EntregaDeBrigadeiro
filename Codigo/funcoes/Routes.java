@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package funcoes;
 
 import Operadores.*;
@@ -10,39 +6,30 @@ import algoritmoGenetico.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- *
- * @author sousa
- */
 public class Routes extends AlgoritmosGeneticos {
 	
 	private static final int DEPOSITO = 0;
-    
+    public Routes(int qRotas, ArrayList<Cliente> aux)
+    {
+        this.qtdRotas = qRotas;
+        this.clientes = new ArrayList();
+        clientes.addAll(aux);
+        this.qtdClientes = this.clientes.size();
+        this.calcularDistancias();
+        
+    }
     public static void main(String[] args)
     {
-        Routes r = new Routes();
-        /*
-        r.qtdRotas = Integer.valueOf(args[0]);
-        r.qtdClientes = Integer.valueOf(args[1]);
-        r.critParada = Integer.valueOf(args[2]);
-        r.numGeracoes = Integer.valueOf(args[3]);
-        r.numCross = (int)(Double.valueOf(args[4])*r.numIndividuos);
-        r.crossover = Integer.valueOf(args[5]) == 0? new CrossoverUmPonto() : new CrossoverDoisPontos();
-        r.probCrossover = Double.valueOf(args[6]);
-        r.mutacao = Integer.valueOf(args[7]) == 0 ? new MutacaoSimples() : new MutacaoTroca();
-        r.probMutacao = Double.valueOf(args[8]);
-        r.critTroca = Integer.valueOf(args[9]);
-        r.elitismo = Boolean.valueOf(args[10]);
-        r.intervaloImpressao = Integer.parseInt(args[11]);*/
-        r.qtdRotas = Utils.getQtdRotas("C:\\Users\\ctcca\\Documents\\USP\\5_Semestre\\IA\\Trabalhos\\EP_AlgoritmosGeneticos_Parte2\\EntregaDeBrigadeiro\\bin\\funcoes\\A-n33-k5.vrp");
-        r.clientes = Utils.getClientes("C:\\Users\\ctcca\\Documents\\USP\\5_Semestre\\IA\\Trabalhos\\EP_AlgoritmosGeneticos_Parte2\\EntregaDeBrigadeiro\\bin\\funcoes\\A-n33-k5.vrp");
-        r.qtdClientes = r.clientes.size();
+       
+        int qRotas = Utils.getQtdRotas("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-n32-k5.vrp");
+        ArrayList<Cliente> aux = Utils.getClientes("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-n32-k5.vrp");
+        Routes r = new Routes(qRotas, aux);
         r.capacidade = 100;
         r.numIndividuos = 20;
         r.critParada = 0;
         r.numGeracoes = 30;
         r.numCross = (int)(1*r.numIndividuos);
-        r.crossover = new CrossoverUmPonto();
+        r.crossover = new CrossoverSimpleRandom(r.mapaDistancias);
         r.probCrossover = 0.9;
         r.mutacao = new MutacaoTroca();
         r.probMutacao = 0.05;
@@ -89,9 +76,9 @@ public class Routes extends AlgoritmosGeneticos {
     {
     	double distanciaPercorrida = 0;
     	int anterior = -1;
-    	int atual = 0;
+    	int atual = 2;
     	
-    	for(int i = 1; i < genotipo.length; i++)
+    	for(int i = 0; i < genotipo.length; i++)
     	{
     		if(genotipo[i] == -1)
     		{
@@ -104,6 +91,7 @@ public class Routes extends AlgoritmosGeneticos {
     		else
     		{
     			atual = genotipo[i]-1;
+                        
     			if(anterior==-1)
     			{
     				distanciaPercorrida += this.mapaDistancias[DEPOSITO][atual];
@@ -111,8 +99,8 @@ public class Routes extends AlgoritmosGeneticos {
     			}
     			else
     			{
-    				distanciaPercorrida += this.mapaDistancias[anterior][atual];
-    				anterior = atual;
+                                    distanciaPercorrida += this.mapaDistancias[anterior][atual];
+                                    anterior = atual;       
     			}
     		}
     	}
