@@ -14,4 +14,6 @@ Operador de correção
 
 Um operador de mutação.
 
-Talvez: Mais operadores de crossover.
+Mais dois operadores de crossover.
+
+Operadores de Suporte e Otimização.
