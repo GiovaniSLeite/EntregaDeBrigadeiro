@@ -284,9 +284,12 @@ public abstract class AlgoritmosGeneticos {
                 if (this.rand.nextDouble() <= this.probCrossover) {
                     //a) Selecionar os pais
                     Individuo[] pais = roleta();
-
+                    System.out.println("*****************************************");
+                    System.out.println(Arrays.toString(pais));
                     //b) Efetuar o cruzamento e gerar os filhos
                     int[][] filhos = crossover.executar(pais[0].getGenotipo(), pais[1].getGenotipo());
+                    System.out.println(Arrays.toString(filhos[0]));
+                    System.out.println("*****************************************");
 
                     //c) Adicionar os filhos a lista
                     for(int[] aux : filhos)
