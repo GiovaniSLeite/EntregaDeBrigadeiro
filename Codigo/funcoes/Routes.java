@@ -9,6 +9,7 @@ import java.util.Arrays;
 public class Routes extends AlgoritmosGeneticos {
 	
 	private static final int DEPOSITO = 0;
+        double pesoPenalizacao = 10;
     public Routes(int qRotas, ArrayList<Cliente> aux)
     {
         this.qtdRotas = qRotas;
@@ -25,10 +26,10 @@ public class Routes extends AlgoritmosGeneticos {
         ArrayList<Cliente> aux = Utils.getClientes("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-n32-k5.vrp");
         Routes r = new Routes(qRotas, aux);
         r.capacidade = 100;
-        r.numIndividuos = 20;
+        r.numIndividuos = 1000;
         r.critParada = 0;
         r.numGeracoes = 30;
-        r.numCross = (int)(2*r.numIndividuos);
+        r.numCross = (int)(10*r.numIndividuos);
         r.crossover = new CrossoverSimpleRandom(r.mapaDistancias);
         r.probCrossover = 0.9;
         r.mutacao = new MutacaoTroca();
@@ -36,6 +37,15 @@ public class Routes extends AlgoritmosGeneticos {
         r.critTroca = 0;
         r.elitismo = false;
         r.intervaloImpressao = 5;
+        
+        //for(double[] linhas : r.mapaDistancias){
+            //for(double abc : linhas)
+            //    System.out.print(abc+"\t");
+          //  System.out.println();
+        //}
+        //System.out.println("\n******************\n");
+        //for(Cliente s : r.clientes)
+        //    System.out.println(s);
         
         r.evolucao();
         
@@ -70,6 +80,7 @@ public class Routes extends AlgoritmosGeneticos {
         
         //System.out.println(r.fitness(cromossomo));
         //System.out.println(r.fitnessAntigo(cromossomo));
+        //System.out.println(r.fitness(new int[]{22, 32, 20, 18, 14, 8, 27, -1, 13, 2, 17, 31, -1, 28, 25, -1, 30, 19, 9, 10, 23, 16, 11, 26, 6, 21, -1, 15, 29, 12, 5, 24, 4, 3, 7}));
     }
     
     protected double fitness(int[] genotipo)
@@ -108,7 +119,7 @@ public class Routes extends AlgoritmosGeneticos {
     	if (genotipo[genotipo.length-1] != -1 && anterior != -1)
     		distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
     	
-    	return distanciaPercorrida;
+    	return distanciaPercorrida+this.pesoPenalizacao*penalizar(genotipo);
     }
     
     @Override
@@ -144,7 +155,24 @@ public class Routes extends AlgoritmosGeneticos {
         
         if(genotipo[genotipo.length-1] != -1 && anterior != null) distanciaPercorrida += anterior.distancia(depot);
         
-        return distanciaPercorrida;
+        return distanciaPercorrida+this.pesoPenalizacao*penalizar(genotipo);
+    }
+    
+    public int penalizar(int [] genotipo)
+    {
+        ArrayList<ArrayList<Integer>> rotas = Utils.getRotas(genotipo);
+        int penalizacao = 0;
+        for(ArrayList<Integer> aux : rotas)
+        {
+            int penalizacaoLocal = -capacidade;
+            for(Integer demanda : aux)
+                penalizacaoLocal+= clientes.get(demanda-1).demanda;
+            if(penalizacaoLocal>0)
+                penalizacao+=penalizacaoLocal;   
+        }
+        
+        return penalizacao;
+        
     }
     
 }
