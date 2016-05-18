@@ -23,7 +23,6 @@ public class CrossoverSimpleRandom extends Crossover {
 
         //Escolhe uma subrota do pai2
         ArrayList<Integer> subrota2 = algoritmoGenetico.Utils.encontraRota(pai2, rand.nextInt(pai2.length));
-        System.out.println("ALOU: "+ subrota2);
         //Se escolheu uma rota com mais de um cliente
         if (subrota2.size() > 0) {
             //Remove os clientes do filho que sao atendidos na subrota do pai2
