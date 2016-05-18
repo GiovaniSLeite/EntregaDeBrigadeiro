@@ -38,7 +38,7 @@ public class Utils {
             ArrayList<Integer> x = new ArrayList();
             ArrayList<Integer> y = new ArrayList();
             for (i = 0; i < qtdClientes; i++) {
-                String[] coord = ler.readLine().split("\\s+");
+                String[] coord = ler.readLine().trim().split("\\s+");
                 x.add(Integer.valueOf(coord[1]));
                 y.add(Integer.valueOf(coord[2]));
             }
@@ -236,6 +236,27 @@ public class Utils {
         
         return filho;
     }
+    
+    public static ArrayList<ArrayList<Integer>> getRotas(int [] genotipo)
+    {
+        ArrayList<ArrayList<Integer>> rotas = new ArrayList();
+        
+        for(int i = 0; i < genotipo.length; i++)
+        {
+            ArrayList<Integer> aux = new ArrayList();
+            if(genotipo[i] != -1)
+            {
+                while(i < genotipo.length && genotipo[i] != -1)
+                    aux.add(genotipo[i++]);
+                
+                rotas.add(aux);
+            }   
+        }
+        
+        return rotas;
+    }
+    
+    
     
 
 }

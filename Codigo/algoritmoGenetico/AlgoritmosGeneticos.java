@@ -7,7 +7,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -274,7 +273,8 @@ public abstract class AlgoritmosGeneticos {
             
             //Guarda no relatorio as informacoes da geracao atual/Imprime no console caso seja uma das impressoes que deva ir (baseado no parametro)
             relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+geracao.get(0).fitness+"\n";
-            if(indGeracao%intervaloImpressao==1) System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
+            if(indGeracao%intervaloImpressao==1){ System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
+            System.out.println(getBetter());}
             
             //A evolucao consiste em:
             //0) Geracao de crossovers e mutacoes: m (numCross) tentativas
@@ -284,12 +284,12 @@ public abstract class AlgoritmosGeneticos {
                 if (this.rand.nextDouble() <= this.probCrossover) {
                     //a) Selecionar os pais
                     Individuo[] pais = roleta();
-                    System.out.println("*****************************************");
-                    System.out.println(Arrays.toString(pais));
+                   // System.out.println("*****************************************");
+                   // System.out.println(Arrays.toString(pais));
                     //b) Efetuar o cruzamento e gerar os filhos
                     int[][] filhos = crossover.executar(pais[0].getGenotipo(), pais[1].getGenotipo());
-                    System.out.println(Arrays.toString(filhos[0]));
-                    System.out.println("*****************************************");
+                   // System.out.println(Arrays.toString(filhos[0]));
+                    //System.out.println("*****************************************");
 
                     //c) Adicionar os filhos a lista
                     for(int[] aux : filhos)
@@ -405,4 +405,6 @@ public abstract class AlgoritmosGeneticos {
     			else
     				this.mapaDistancias[i][j] = this.clientes.get(i).distancia(this.clientes.get(j));
     }
+    
+    
 }
