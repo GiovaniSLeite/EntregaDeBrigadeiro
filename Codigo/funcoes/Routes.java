@@ -28,7 +28,7 @@ public class Routes extends AlgoritmosGeneticos {
         r.numIndividuos = 20;
         r.critParada = 0;
         r.numGeracoes = 30;
-        r.numCross = (int)(1*r.numIndividuos);
+        r.numCross = (int)(2*r.numIndividuos);
         r.crossover = new CrossoverSimpleRandom(r.mapaDistancias);
         r.probCrossover = 0.9;
         r.mutacao = new MutacaoTroca();
@@ -76,7 +76,7 @@ public class Routes extends AlgoritmosGeneticos {
     {
     	double distanciaPercorrida = 0;
     	int anterior = -1;
-    	int atual = 2;
+    	int atual = 0;
     	
     	for(int i = 0; i < genotipo.length; i++)
     	{
