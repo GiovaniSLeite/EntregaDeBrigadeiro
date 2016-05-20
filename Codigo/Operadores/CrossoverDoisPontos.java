@@ -16,7 +16,7 @@ public class CrossoverDoisPontos extends Crossover {
     
     /*-----------------|
     Operador de cruzamento 2: Cruzamento de dois pontos
-    Recebe dois individuos a e b da população
+    Recebe dois individuos a e b da populacao
     Sorteia uma posicao i e uma j, pega de 0 a i do cromossomo de a, de i a j do cromossomo b, e de j ao final do cromossomo de a
     Faz o mesmo invertendo os papeis (aba para bab), assim formando o cromossomo dos dois filhos
     Retorna os dois cromossomos criados a partir de a e b (filhos)

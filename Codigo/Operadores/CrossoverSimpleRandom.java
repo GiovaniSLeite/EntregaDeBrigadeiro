@@ -15,6 +15,12 @@ public class CrossoverSimpleRandom extends Crossover {
     }
 
     @Override
+    //Crossover simple Random
+    //0) Copia o pai 1 para o filho
+    //1) Escolhe uma rota aleatória no pai 2
+    //2) Insere essa rota no pai melhor lugar possível no filho
+    //3) Remove clientes duplicados no filho
+    // Retorna o filho
     public int[][] executar(int[] pai1, int[] pai2) {
 
         //Filho recebe pai1

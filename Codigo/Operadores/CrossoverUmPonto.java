@@ -15,7 +15,7 @@ public class CrossoverUmPonto extends Crossover {
 
     /*-----------------|
     Operador de cruzamento 1: Cruzamento de um ponto
-    Recebe dois individuos a e b da população
+    Recebe dois individuos a e b da populacao
     Sorteia uma posicao i, pega de 0 a i do cromossomo de a e de i ao final do cromossomo de b e vice-versa
     Retorna os dois cromossomos criados a partir de a e b (filhos)
     |-----------------*/
@@ -27,7 +27,7 @@ public class CrossoverUmPonto extends Crossover {
         int[] f1 = new int[pai1.length];
         int[] f2 = new int[pai1.length];
 
-        //Preenche a primeira parte de cada filho (do 0 até i)
+        //Preenche a primeira parte de cada filho (do 0 ate i)
         int i;
         for (i = 0; i < p; i++) {
             f1[i] = pai1[i];

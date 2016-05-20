@@ -30,7 +30,7 @@ public class Routes extends AlgoritmosGeneticos {
         r.critParada = 0;
         r.numGeracoes = 30;
         r.numCross = (int)(10*r.numIndividuos);
-        r.crossover = new CrossoverSimpleRandom(r.mapaDistancias);
+        r.crossover = new CrossoverOXadaptado();
         r.probCrossover = 0.9;
         r.mutacao = new MutacaoTroca();
         r.probMutacao = 0.05;
@@ -73,14 +73,25 @@ public class Routes extends AlgoritmosGeneticos {
         r.capacidade = 30;
         
         r.calcularDistancias();
-        //int[] cromossomo = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
         
-        int[] cromossomo = {2, 4, 7, -1, 2, -1, 5, 8, 10, 9, -1};
-        System.out.println(Arrays.toString(cromossomo));
+        int[] cromossomo1 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
+        int[] cromossomo2 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
+        
+        System.out.println(Arrays.toString(cromossomo1));
+        System.out.println(Arrays.toString(cromossomo2));
+        
         System.out.println();
-        Correcao c = new Correcao(r.mapaDistancias);
         
-        System.out.println(Arrays.toString(c.executar(cromossomo, r.qtdClientes, r.qtdRotas)));
+        int[][] retorno = r.crossover.executar(cromossomo1, cromossomo2);
+        System.out.println(Arrays.toString(retorno[0]));
+        System.out.println(Arrays.toString(retorno[1]));
+        
+        //int[] cromossomo = {2, 4, 7, -1, 2, -1, 5, 8, 10, 9, -1};
+        //System.out.println(Arrays.toString(cromossomo));
+        //System.out.println();
+        //Correcao c = new Correcao(r.mapaDistancias);
+        
+        //System.out.println(Arrays.toString(c.executar(cromossomo, r.qtdClientes, r.qtdRotas)));
         //for(int i = 0; i<r.qtdClientes; i++)
         //System.out.println(Arrays.toString(r.mapaDistancias[i]));
         

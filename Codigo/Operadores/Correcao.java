@@ -9,20 +9,21 @@ import java.util.Random;
 public class Correcao {
     static Random rand;
     double[][] dist;
+    
     public Correcao(double [][] dist)
     {
         this.dist = dist;
         rand = new Random();
     }
     
-    //executar(new int[]{1,-1,3,4,5,-1,1,8,7},22);
-    
-    
+    //Método executar, recebe um genótipo e o devolve corrigido.
     public int[] executar(int[] genotipo, int clientes, int motoristas)
     {
-        //Pega as rotas do genotipo
+        //Pega as rotas do genotipo - se existirem clientes repetidos
+    	//dentro de uma rota, ja serao corrigidos aqui
         ArrayList<ArrayList<Integer>> rotas = Utils.getRotas(genotipo);
-        //Remove os clientes repetidos
+        
+        //Remove os clientes repetidos entre rotas
         for(int i = 0; i < rotas.size(); i++)
             for(int j = i+1; j < rotas.size(); j++)
             {
@@ -36,11 +37,13 @@ public class Correcao {
                         rotas.get(j).remove(repetidos);
                     }
             }
+        
         //Adiciona as rotas faltantes/remove as sobressalentes
         while(rotas.size() > motoristas)
             rotas.remove(rand.nextInt(rotas.size()));
         while(rotas.size() < motoristas)
             rotas.add(new ArrayList());
+        
         //Seleciona os clientes faltantes
         ArrayList<Integer> clientesFaltantes = new ArrayList();
         for(int i = 2; i < clientes; i++)
@@ -51,6 +54,7 @@ public class Correcao {
         //Transforma em um genotipo
         genotipo = Utils.converteListasEmGenotipo(rotas);
         
+        //Para cada cliente faltante, inserir no melhor lugar possível
         for(int cl : clientesFaltantes)
             genotipo = Utils.inserirMelhorLugar(genotipo, cl, dist);
      
