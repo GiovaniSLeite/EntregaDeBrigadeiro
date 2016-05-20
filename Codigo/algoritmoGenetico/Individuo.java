@@ -25,13 +25,15 @@ public class Individuo implements Comparable<Individuo>{
     /*-----------------|
     Esse construtor cria um Individuo aleatorio
     |-----------------*/
-    //Esse método foi adaptado para não gerar infactibilidade no cromossomo
+    
+    //Esse metodo foi adaptado para nao gerar infactibilidade no cromossomo
     //Mas mantendo a aleatoriedade
     public static int[] cromossomoAleatorio(int nroRotas, int nroClientes)
     {
         int [] cromossomo = new int[nroRotas+nroClientes-2];
         Random rand = new Random();
         
+        //Distribuir os carros no genotipo
         for(int i = 0; i < nroRotas-1; i++)
         {
             int p = rand.nextInt(cromossomo.length);
@@ -44,10 +46,13 @@ public class Individuo implements Comparable<Individuo>{
         
         ArrayList<Integer> clientesDisponiveis = new ArrayList();
         
+        //Comeca do 2 porque o cliente 1 e o deposito
         for(int i = 2; i<= nroClientes; i++)
             clientesDisponiveis.add(i);
         
+        //Desordenar o array com vista a garaantir a aleatoriedade
         Collections.shuffle(clientesDisponiveis);
+        
         Iterator<Integer> it = clientesDisponiveis.iterator();
         for(int i = 0; i < cromossomo.length && it.hasNext(); i++)         
             if(cromossomo[i]==0)

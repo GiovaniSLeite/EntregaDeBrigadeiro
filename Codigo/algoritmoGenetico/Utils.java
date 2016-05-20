@@ -9,17 +9,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /*-----------------|Classe Utils|-----------------/
-
+//Espaco de metodos utilitarios para calculos
 /-----------------|            |-----------------*/
 public class Utils {
 
+	//Metodo que faz leitura do arquivo e armazena os clientes numa lista
     public static ArrayList<Cliente> getClientes(String arq) {
         
         ArrayList<Cliente> clientes = new ArrayList();
+        
         try {
             BufferedReader ler = new BufferedReader(new FileReader(new File(arq)));
             
-            //Ler as primeiras três linhas
+            //Ler as primeiras tres linhas
             int i = 3;
             while (i > 0) {
                 i--;
@@ -29,7 +31,7 @@ public class Utils {
             //Pegar quantidade de clientes depois do : da 4 linha
             int qtdClientes = Integer.valueOf(ler.readLine().split(":")[1].trim());
             
-            //Ler as próximas três linhas
+            //Ler as proximas tres linhas
             i = 3;
             while (i > 0) {
                 i--;
@@ -54,7 +56,7 @@ public class Utils {
                 demand.add(Integer.valueOf(coord[1]));
             }
 
-            //Adicionar os clientes na estrutura específica
+            //Adicionar os clientes na estrutura especifica
             for (i = 0; i < x.size(); i++) {
                 clientes.add(new Cliente(x.get(i), y.get(i), demand.get(i)));
             }
@@ -67,8 +69,8 @@ public class Utils {
         return clientes;
     }
 
-    //Pegar a quantidade de caminhões necessários para solucionar o problema
-    //Esse método está pegando o número de caminhões da segunda linha do arquivo
+    //Pegar a quantidade de caminhoes necessarios para solucionar o problema
+    //Esse metodo esta pegando o numero de caminhoes da segunda linha do arquivo
     public static int getQtdRotas(String arq){
         int resp = 1;
         try {
@@ -84,11 +86,14 @@ public class Utils {
         return resp;
     }
     
-    
+    //Metodo que recebe um genotipo, uma posicao, e retorna a rota
+    //em que esse cliente esta inserido
+    //Pre-requisito: posicao deve ser um cliente e nao um carro
     public static ArrayList<Integer> encontraRota(int[] genotipo, int posicao)
     {
-        int cmc =0;
+        int cmc = 0;
         int fim = genotipo.length-1;
+        
         //Encontra o comeco da rota
         for(int i = posicao; i>=0; i--)
             if(genotipo[i] == -1){
@@ -102,18 +107,23 @@ public class Utils {
                 fim = i-1;
                 break;
             }
+        
         //Adiciona esses a uma lista
         ArrayList<Integer> rota = new ArrayList();
         for(int i = cmc; i <= fim; i++)
             rota.add(genotipo[i]);
+        
         //Retorna a lista
         return rota;
     }
     
+    //Metodo que remove de um genotipo todos os clientes que estao numa lista de clientes
+    //Pre-requisito: os clientes removidos nao podem estar repetidos - motivo: tamanho do array novoGenotipo
     public static int[] removeClientes(int[] genotipo, ArrayList<Integer> clientes)
     {
         int[] novoGenotipo = new int[genotipo.length - clientes.size()];
-        int nAdicionados =0;
+        int nAdicionados = 0;
+        
         for(int i =0; i < genotipo.length; i++)
             if(!clientes.contains(genotipo[i]))
                 novoGenotipo[i-nAdicionados] = genotipo[i];
@@ -122,10 +132,14 @@ public class Utils {
         
         return novoGenotipo;          
     }
+    
+    //Metodo que remove um cliente especifico de um genotipo
+    //Pre-requisito: o cliente nao pode estar repetido - motivo: tamanho do array novoGenotipo
     public static int[] removeClientes(int[] genotipo, int cliente)
     {
         int[] novoGenotipo = new int[genotipo.length - 1];
-        int nAdicionados =0;
+        int nAdicionados = 0;
+        
         for(int i =0; i < genotipo.length; i++)
             if(genotipo[i] == cliente)
                 novoGenotipo[i-nAdicionados] = genotipo[i];
@@ -142,17 +156,29 @@ public class Utils {
     //PayOff = distancia entre a e b - a distancia entre a e o primeiro da subrota do pai2 - distancia entre b e o ultimo da subrota do pai2 
     public static int[] InserirMelhorLugar(int[] filho, ArrayList<Integer> subrota2, double[][] dist)
     {
+    	//Inicializacao de variaveis
         int DEPOSITO = 0;
-         double maiorPayOff = 0.0;
+        double maiorPayOff = Double.MIN_VALUE;
+        
         int ondeInserir = 0;
+        
         for(int i =1; i < filho.length; i++)
         {
             double payOff = 0.0;
-            if(filho[i-1] == -1 && filho [i] ==-1) continue;
+            
+            // Insercao em uma rota vazia
+            if(filho[i-1] == -1 && filho [i] ==-1)
+            	payOff = dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)][DEPOSITO];
+            
+            // Insercao entre o deposito e um cliente
             else if(filho[i-1] == -1)
                 payOff = dist[DEPOSITO][filho[i]-1] - dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filho[i]-1];
+            
+            // Insercao entre um cleinte e o deposito
             else if(filho[i] == -1)
                 payOff = dist[filho[i-1]-1][DEPOSITO] - dist[filho[i-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][DEPOSITO];
+            
+            // Insercao entre dois filhos
             else
                 payOff = dist[filho[i-1]-1][filho[i]-1] - dist[filho[i-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filho[i]-1];
 
@@ -183,24 +209,35 @@ public class Utils {
             return novoFilho;
     }
     
-    
+    //Mesmo esquema acima, so que inserindo um unico cliente
     public static int[] inserirMelhorLugar(int[] filho, int cliente, double[][] dist)
     {
+    	//Iniciaizacao de variaveis
         int DEPOSITO = 0;
         double maiorPayOff = 0.0;
         int ondeInserir = 0;
+        
         for(int i =1; i < filho.length; i++)
-        {   //ERRADO FALTA VERIFICAR ENTRE O DEPOSITO E O PRIMEIRO GENE
-            //ADAPTAR PARA PODER INSERIR EM ROTAS VAZIAS
+        {   
             double payOff = Double.MIN_VALUE;
-            if(filho[i-1] == -1 && filho [i] ==-1) continue;
+            
+            //Inserir numa rota vazia
+            if(filho[i-1] == -1 && filho [i] ==-1)
+            	payOff = dist[DEPOSITO][cliente-1] * 2;
+            
+            //Inserir entre o deposito e um filho
             else if(filho[i-1] == -1)
                  payOff = dist[DEPOSITO][filho[i]-1] - dist[DEPOSITO][cliente-1] - dist[cliente-1][filho[i]-1];
+            
+            //inserir entre um filho e o deposito
             else if(filho[i] == -1)
                 payOff = dist[filho[i-1]-1][DEPOSITO] - dist[filho[i-1]-1][cliente-1] - dist[cliente-1][DEPOSITO];
+            
+            //Inserir entre dois filhos
             else
                 payOff = dist[filho[i-1]-1][filho[i]-1] - dist[filho[i-1]-1][cliente-1] - dist[cliente-1][filho[i]-1];
 
+            //Se o payOff for maior, substituir
             if(payOff > maiorPayOff)
             {
                 maiorPayOff = payOff;
@@ -224,6 +261,8 @@ public class Utils {
             return novoFilho;
     }
     
+    //Metodo que insere um cliente numa posicao p dentro do genotipo de um individuo
+    //deslocando os individuos impactados para a frente
     public static int[] inserirAleatorio(int [] individuo, int cliente, int p)
     {
         int [] filho = new int[individuo.length+1];
@@ -240,6 +279,9 @@ public class Utils {
         return filho;
     }
     
+    //Metodo que obtem todas as rotas que existem num genotipo
+    //Basicamente destrincha um genotipo numa lista de rotas
+    //Nao insere rotas vazias
     public static ArrayList<ArrayList<Integer>> getRotas(int [] genotipo)
     {
         ArrayList<ArrayList<Integer>> rotas = new ArrayList();
@@ -247,6 +289,8 @@ public class Utils {
         for(int i = 0; i < genotipo.length; i++)
         {
             ArrayList<Integer> aux = new ArrayList();
+            
+            //Se a rota for vazia, nao ocorre a insercao
             if(genotipo[i] != -1)
             {
                 while(i < genotipo.length && genotipo[i] != -1)
@@ -262,6 +306,8 @@ public class Utils {
         return rotas;
     }
     
+    //boundingBox -> Retorna o menor retangulo que contem todos os pontos da subrota passada
+    //Fecho convexo retangular
     public static Rectangle boundingBox(ArrayList<Integer> subrota, ArrayList<Cliente> clientes)
     {
         int[] x = new int[subrota.size()+1];
@@ -276,18 +322,27 @@ public class Utils {
         return new Polygon(x, y, x.length).getBounds();
     }
     
+    //Metodo que converte uma lista de listas de clientes em um genotipo
     public static int[] converteListasEmGenotipo(ArrayList<ArrayList<Integer>> rotas)
     {
         int tamanho = 0;
+        
+        //Calcula o tamanho da lista de rotas
         for(ArrayList<Integer> subrotas : rotas)
             tamanho+=subrotas.size();
+        
+        //Menos um porque um carro nao aparece na representacao
         tamanho+=rotas.size()-1;
         
         int[] genotipo = new int[tamanho];
         int i = 0;
         for(ArrayList<Integer> subrotas : rotas){
+        	
+        	//Inserir todos os clientes da subrota
             for(int gene : subrotas)
                 genotipo[i++] = gene;
+            
+            //Inserir -1 ao fim da subrota
             if(i < genotipo.length)
                 genotipo[i++] = -1;
         }

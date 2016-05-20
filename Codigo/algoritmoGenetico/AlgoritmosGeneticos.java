@@ -15,16 +15,19 @@ import java.util.logging.Logger;
 
 /*-----------------| Classe abstrata das funcoes |-----------------*/
 public abstract class AlgoritmosGeneticos {
+	
     /*-----------------| Espaco dos Atributos |-----------------*/
     //geracao -> Lista de elementos da geracao atual da populacao
     //Cada elemento devera mapear o valor x e o valor y do ponto em binario
     List<Individuo> geracao;
     List<Individuo> geracaoRoleta;
+    
     //indGeracao -> Indicador da geracao em que a populacao esta
     int indGeracao;
 
-    /* qtdRotas = quantidade de carros
-       qtdClientes = Quantidade de clientes (incluindo o deposito*/
+    //qtdRotas = quantidade de carros
+    //qtdClientes = Quantidade de clientes (incluindo o deposito)
+    //capacidade = Capacidade que todos os carros t�m de carregar (em qtd de objetos)
     protected int qtdRotas;
     protected int qtdClientes;
     protected int capacidade;
@@ -38,6 +41,7 @@ public abstract class AlgoritmosGeneticos {
     //fitnessTotal - Guarda o fitness total da geracao - para evitar recalculo
     double fitnessTotal;
     double fitnessTotalRoleta;
+    
     /*-----------------| Atributos da Evolucao |-----------------*/
     //Criterio de Parada
     protected int critParada;
@@ -74,9 +78,8 @@ public abstract class AlgoritmosGeneticos {
     //Intervalo de impressao
     protected int intervaloImpressao;
     
-    //Mapa de Distâncias
+    //Mapa de Distancias
     protected double[][] mapaDistancias;
-    
     
     /*-----------------| Espaco dos Metodos |-----------------*/
     //Construtor -> Por enquanto so inicializa rand
@@ -125,6 +128,7 @@ public abstract class AlgoritmosGeneticos {
     /*-----------------|
     Cria uma copia da geracao atual adaptando o fitness dos individuos de forma que
     todos os valores sejam positivos e garantam o funcionamento da roleta
+    ==> Adaptado para os problemas de roteamento, que sao apenas de minimizacao
     |-----------------*/
     void criaGeracaoRoleta()
     {
@@ -132,7 +136,6 @@ public abstract class AlgoritmosGeneticos {
         double shift = 0; //O shift e para garantir que nenhum valor seja negativo
         fitnessTotalRoleta = 0; //Fitness total adaptado
         
-           
             //Se o maior valor for positivo, como ele virara negativo ao multiplicar por -1, ele sera o shift
             if(geracao.get(geracao.size()-1).fitness > 0)
                 shift = geracao.get(geracao.size()-1).fitness +1;
@@ -162,7 +165,8 @@ public abstract class AlgoritmosGeneticos {
         Individuo ind1 = null,ind2 = null;
         int escolhido = 0;
        
-        for (int j = 0; g1 > 0; j++) {//Enquanto o numero for maior que 0, se ele for menor ou igual, para pois esse eh o individuo escolhido
+        for (int j = 0; g1 > 0; j++) {
+        	//Enquanto o numero for maior que 0, se ele for menor ou igual, para pois esse eh o individuo escolhido
             ind1 = geracaoRoleta.get(j);
             double x =(ind1.fitness) / this.fitnessTotalRoleta; 
             g1 -= x;//Desconta a % que o fitness do individuo representa
@@ -180,6 +184,7 @@ public abstract class AlgoritmosGeneticos {
                 escolhido2 = j;
             }
         } while (escolhido2 == escolhido);//Para garantir que nao escolhemos dois iguais
+        
         return new Individuo[]{ind1, ind2};
     }
     
@@ -210,7 +215,6 @@ public abstract class AlgoritmosGeneticos {
     List<Individuo> melhoresFilhos(List<Individuo> proxFilhos) {
         List<Individuo> melhoresFilhos;//Cria a lista de melhores filhos
         Collections.sort(proxFilhos); //Ordena o vetor de filhos (parametro)
-         // Caso seja minizacao, eh analogo a maximizacao, mas escolhe os filhos com os menores valores
             if(proxFilhos.size() < numIndividuos){
                 melhoresFilhos = proxFilhos;
                 melhoresFilhos.addAll(geracao.subList(0, numIndividuos - proxFilhos.size()+1));
@@ -258,12 +262,10 @@ public abstract class AlgoritmosGeneticos {
         this.indGeracao = 1; //Numero da geracao
 
         // Iniciar a Evolucao
-        // A Evolucao serÃ¡ um while true, cujo criterio de parada definira quando sair do laco
+        // A Evolucao sera um while true, cujo criterio de parada definira quando sair do laco
         while (true) {
             //Ordena, em ordem crescente de fitness, os individuos
             Collections.sort(geracao); 
-            //for(Individuo a : geracao)
-            //    System.out.println(a);
             
             //Cria a copia adaptada da geracao que servira para a roleta
             criaGeracaoRoleta(); 
@@ -284,12 +286,9 @@ public abstract class AlgoritmosGeneticos {
                 if (this.rand.nextDouble() <= this.probCrossover) {
                     //a) Selecionar os pais
                     Individuo[] pais = roleta();
-                   // System.out.println("*****************************************");
-                   // System.out.println(Arrays.toString(pais));
+
                     //b) Efetuar o cruzamento e gerar os filhos
                     int[][] filhos = crossover.executar(pais[0].getGenotipo(), pais[1].getGenotipo());
-                   // System.out.println(Arrays.toString(filhos[0]));
-                    //System.out.println("*****************************************");
 
                     //c) Adicionar os filhos a lista
                     for(int[] aux : filhos)
@@ -323,12 +322,12 @@ public abstract class AlgoritmosGeneticos {
                 }
             
             //Nota: por uma questao simples, nao se aplica elitismo quando nao ha substituicao de populacao
+            
             List<Individuo> copiaFilhos = new ArrayList<Individuo>();
             copiaFilhos.addAll(proxFilhos);
             
             //Seleciona os melhores para comporem a proxima geracao
             this.geracao = this.melhoresFilhos(copiaFilhos);
-
             
             //Incrementar a geracao
             this.indGeracao++;
@@ -341,12 +340,12 @@ public abstract class AlgoritmosGeneticos {
                 //Teste de convergencia - Se a geracao convergiu, paramos a evolucao
                 if (this.convergiu()) {
                     break;
-                } else if(indGeracao == 10000) //Se alcancar a 10000o. geracao, parar evolucao
+                } 
+                else if(indGeracao == 10000) //Se alcancar a 10000o. geracao, parar evolucao
                 {
                     convergiu = false;
                     System.out.println("NAO CONVERGIU");
-                    break;
-                    
+                    break;   
                 }
             } else if (this.critParada == NUM_GERACOES) {
                 //Se a geracao atual corresponder ao numero estabelecido, paramos a evolucao
@@ -359,6 +358,7 @@ public abstract class AlgoritmosGeneticos {
             //Limpar os objetos utilizados
             proxFilhos.clear();
         }
+        
         //Imprimir as informacoes da ultima geracao/Guardar no relatorio
         System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
         relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+geracao.get(0).fitness+"\n";
@@ -378,7 +378,6 @@ public abstract class AlgoritmosGeneticos {
         String nome = "rotas";
         //Nome da funcao que esta sendo rodada
         
-        
         //Cria o arquivo
         try {
             BufferedWriter w = new BufferedWriter(new FileWriter(nome+","+(qtdRotas+qtdClientes-2)+","+numIndividuos+","+critParada+","+numGeracoes+","+numCross+","+crossover+","
@@ -386,13 +385,16 @@ public abstract class AlgoritmosGeneticos {
             
             w.append(r);
             w.close();
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
+        	//Escrever log de execoes
             Logger.getLogger(AlgoritmosGeneticos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    //Criar um mapa de distâncias para evitar de ficar calculando as 
-    //distâncias toda hora
+    //Criar um mapa de distancias para evitar de ficar calculando as 
+    //distancias toda hora
     public void calcularDistancias()
     {
     	int i, j;
@@ -405,6 +407,5 @@ public abstract class AlgoritmosGeneticos {
     			else
     				this.mapaDistancias[i][j] = this.clientes.get(i).distancia(this.clientes.get(j));
     }
-    
-    
+       
 }
