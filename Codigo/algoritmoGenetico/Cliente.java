@@ -18,6 +18,6 @@ public class Cliente {
     
     public String toString()
     {
-        return this.x +"\n"+this.y;
+        return this.x +"\t"+this.y+"\t"+this.demanda;
     }
 }

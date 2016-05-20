@@ -1,5 +1,7 @@
 package algoritmoGenetico;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -188,8 +190,9 @@ public class Utils {
         double maiorPayOff = 0.0;
         int ondeInserir = 0;
         for(int i =1; i < filho.length; i++)
-        {
-            double payOff = 0.0;
+        {   //ERRADO FALTA VERIFICAR ENTRE O DEPOSITO E O PRIMEIRO GENE
+            //ADAPTAR PARA PODER INSERIR EM ROTAS VAZIAS
+            double payOff = Double.MIN_VALUE;
             if(filho[i-1] == -1 && filho [i] ==-1) continue;
             else if(filho[i-1] == -1)
                  payOff = dist[DEPOSITO][filho[i]-1] - dist[DEPOSITO][cliente-1] - dist[cliente-1][filho[i]-1];
@@ -223,7 +226,7 @@ public class Utils {
     
     public static int[] inserirAleatorio(int [] individuo, int cliente, int p)
     {
-        int [] filho = new int[individuo.length];
+        int [] filho = new int[individuo.length+1];
         
         int i;
         for(i = 0; i < p; i ++)
@@ -247,7 +250,10 @@ public class Utils {
             if(genotipo[i] != -1)
             {
                 while(i < genotipo.length && genotipo[i] != -1)
-                    aux.add(genotipo[i++]);
+                    if(!aux.contains(genotipo[i]))
+                        aux.add(genotipo[i++]);
+                    else
+                        i++;
                 
                 rotas.add(aux);
             }   
@@ -256,7 +262,37 @@ public class Utils {
         return rotas;
     }
     
+    public static Rectangle boundingBox(ArrayList<Integer> subrota, ArrayList<Cliente> clientes)
+    {
+        int[] x = new int[subrota.size()+1];
+        int[] y = new int[subrota.size()+1];
+        x[0] = clientes.get(0).x;
+        y[0] = clientes.get(0).y;
+        for(int i = 1; i < x.length; i++)
+        {
+            x[i] = clientes.get(subrota.get(i-1)-1).x;
+            y[i] = clientes.get(subrota.get(i-1)-1).y;
+        }       
+        return new Polygon(x, y, x.length).getBounds();
+    }
     
-    
+    public static int[] converteListasEmGenotipo(ArrayList<ArrayList<Integer>> rotas)
+    {
+        int tamanho = 0;
+        for(ArrayList<Integer> subrotas : rotas)
+            tamanho+=subrotas.size();
+        tamanho+=rotas.size()-1;
+        
+        int[] genotipo = new int[tamanho];
+        int i = 0;
+        for(ArrayList<Integer> subrotas : rotas){
+            for(int gene : subrotas)
+                genotipo[i++] = gene;
+            if(i < genotipo.length)
+                genotipo[i++] = -1;
+        }
+        
+        return genotipo;
+    }
 
 }
