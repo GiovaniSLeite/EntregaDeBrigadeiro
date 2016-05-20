@@ -168,7 +168,7 @@ public class Utils {
             
             // Insercao em uma rota vazia
             if(filho[i-1] == -1 && filho [i] ==-1)
-            	payOff = dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)][DEPOSITO];
+            	payOff = 0 - dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][DEPOSITO];
             
             // Insercao entre o deposito e um cliente
             else if(filho[i-1] == -1)
@@ -223,7 +223,7 @@ public class Utils {
             
             //Inserir numa rota vazia
             if(filho[i-1] == -1 && filho [i] ==-1)
-            	payOff = dist[DEPOSITO][cliente-1] * 2;
+            	payOff = 0 - dist[DEPOSITO][cliente-1] * 2;
             
             //Inserir entre o deposito e um filho
             else if(filho[i-1] == -1)
