@@ -66,6 +66,9 @@ public abstract class AlgoritmosGeneticos {
 
     //Probabilidade de mutacao
     protected double probMutacao;
+    
+    //Probabilidade especial de inserir no melhor lugar -> Mutacao dirigida
+    protected double probEspecial;
 
     //Criterio de Troca
     protected int critTroca;
@@ -74,6 +77,12 @@ public abstract class AlgoritmosGeneticos {
 
     //Elitismo?
     protected boolean elitismo;
+    
+    //Operadores de suporte?
+    protected boolean suporte;
+    
+    //Operadores de correcao?
+    protected boolean correcao;
     
     //Intervalo de impressao
     protected int intervaloImpressao;
@@ -94,7 +103,6 @@ public abstract class AlgoritmosGeneticos {
     O genotipo eh convertido em fenotipo dentro do metodo
     |-----------------*/
     protected abstract double fitness(int[] genotipo);
-    protected abstract double fitnessAntigo(int[] genotipo);
     
     /*-----------------|
     Calcula o fitness total de toda a populacao
