@@ -27,7 +27,7 @@ public abstract class AlgoritmosGeneticos {
 
     //qtdRotas = quantidade de carros
     //qtdClientes = Quantidade de clientes (incluindo o deposito)
-    //capacidade = Capacidade que todos os carros têm de carregar (em qtd de objetos)
+    //capacidade = Capacidade que todos os carros tÃªm de carregar (em qtd de objetos)
     protected int qtdRotas;
     protected int qtdClientes;
     protected int capacidade;
@@ -250,14 +250,12 @@ public abstract class AlgoritmosGeneticos {
         boolean convergiu = true; //Boolean para controle de convergencia
         String relatorio =""; //String a ser guardada em arquivo com o relatorio conforme especificado
         //Parametros da execucao
-        relatorio = relatorio + "numGenes,numIndividuos,critParada,numGeracoes,numCross,tipoCrossover,probCrossover,tipoMutacao,probMutacao,critTroca,elitismo\n";
+        relatorio = relatorio + "qtdClientes,qtdRotas,numIndividuos,critParada,numGeracoes,numCross,tipoCrossover,probCrossover,tipoMutacao,probMutacao,critTroca,elitismo\n";
         
         //Impressao dos parametros da execucao
-        System.out.println("numGenes\tnumIndividuos\tcritParada\tnumGeracoes\tnumCross\ttipoCrossover\tprobCrossover\ttipoMutacao\tprobMutacao\tcritTroca\telitismo\n"
-                +(qtdRotas+qtdClientes-2)+"\t"+numIndividuos+"\t"+critParada+"\t"+numGeracoes+"\t"+numCross+"\t"+crossover+"\t"
-                +probCrossover+"\t"+mutacao+"\t"+probMutacao+"\t"+critTroca+"\t"+elitismo+"\n");
-        relatorio = relatorio + "ROTA"+",";//INSERIR NOME
-        relatorio = relatorio+(qtdRotas+qtdClientes-2)+","+numIndividuos+","+critParada+","+numGeracoes+","+numCross+","+crossover+","
+        System.out.println("qtdClientes\tqtdRotas\tnumIndividuos\tcritParada\tnumGeracoes\tnumCross\ttipoCrossover\tprobCrossover\ttipoMutacao\tprobMutacao\tcritTroca\telitismo\n"
+                +qtdClientes+"\t"+qtdRotas+"\t"+numIndividuos+"\t"+critParada+"\t"+numGeracoes+"\t"+numCross+"\t"+crossover+"\t"+probCrossover+"\t"+mutacao+"\t"+probMutacao+"\t"+critTroca+"\t"+elitismo+"\n");
+        relatorio = relatorio+qtdClientes+","+qtdRotas+","+numIndividuos+","+critParada+","+numGeracoes+","+numCross+","+crossover+","
                 +probCrossover+","+mutacao+","+probMutacao+","+critTroca+","+elitismo+"\n\n";
         
         //Colunas disponiveis no relatorio e na impressao -> Numero da geracao, fitness total da populacao, fitness medio, fitness maximo, fitness minimo
@@ -268,12 +266,15 @@ public abstract class AlgoritmosGeneticos {
         
         this.geradorInicial(); //Gerar primeira populacao
         this.indGeracao = 1; //Numero da geracao
-
+        
+        
+        
+        
         // Iniciar a Evolucao
         // A Evolucao sera um while true, cujo criterio de parada definira quando sair do laco
         while (true) {
             //Ordena, em ordem crescente de fitness, os individuos
-            Collections.sort(geracao); 
+            Collections.sort(geracao);
             
             //Cria a copia adaptada da geracao que servira para a roleta
             criaGeracaoRoleta(); 
@@ -310,6 +311,7 @@ public abstract class AlgoritmosGeneticos {
                 //Sortear um filho a ser mutado
                 int indice = rand.nextInt(proxFilhos.size());
                 //Efetuar a mutacao
+                
                 int[] mutante = mutacao.executar(proxFilhos.get(indice).getGenotipo());
                 
                 //Adicionar o filho mutado em seu lugar de origem
@@ -383,12 +385,12 @@ public abstract class AlgoritmosGeneticos {
     |-----------------*/
     public void imprimirRelatorio(String r)
     {
-        String nome = "rotas";
+        String nome = "ROTAS";
         //Nome da funcao que esta sendo rodada
         
         //Cria o arquivo
         try {
-            BufferedWriter w = new BufferedWriter(new FileWriter(nome+","+(qtdRotas+qtdClientes-2)+","+numIndividuos+","+critParada+","+numGeracoes+","+numCross+","+crossover+","
+            BufferedWriter w = new BufferedWriter(new FileWriter(nome+","+qtdClientes+","+qtdRotas+","+numIndividuos+","+critParada+","+numGeracoes+","+numCross+","+crossover+","
                     +probCrossover+","+mutacao+","+probMutacao+","+critTroca+","+elitismo+".csv"));
             
             w.append(r);
