@@ -138,13 +138,13 @@ public class Utils {
     public static int[] removeClientes(int[] genotipo, int cliente)
     {
         int[] novoGenotipo = new int[genotipo.length - 1];
-        int nAdicionados = 0;
         
-        for(int i =0; i < genotipo.length; i++)
-            if(genotipo[i] == cliente)
-                novoGenotipo[i-nAdicionados] = genotipo[i];
+        int i = 0, j = 0;
+        while(i < novoGenotipo.length)
+            if(genotipo[j] != cliente)
+                novoGenotipo[i++] = genotipo[j++];
             else
-                nAdicionados++;
+                j++;
         
         return novoGenotipo;          
     }
