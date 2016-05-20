@@ -38,41 +38,49 @@ public class Routes extends AlgoritmosGeneticos {
         r.elitismo = false;
         r.intervaloImpressao = 5;
         
+        //PARA VER MATRIZ DE DISTANCIA P/ EXCEL
         //for(double[] linhas : r.mapaDistancias){
             //for(double abc : linhas)
             //    System.out.print(abc+"\t");
           //  System.out.println();
         //}
+        //PARA VER X E Y DE CLIENTES PARA EXCEL
         //System.out.println("\n******************\n");
         //for(Cliente s : r.clientes)
         //    System.out.println(s);
         
-        r.evolucao();
+        //r.evolucao();
+        
+        
+        
         
         //Modelo de brinquedo
-        //r.qtdClientes = 10;
-        //r.qtdRotas = 3;
+        r.qtdClientes = 10;
+        r.qtdRotas = 3;
         
-        //r.clientes.clear();
-        //r.clientes.add(new Cliente(0,9,0));
-        //r.clientes.add(new Cliente(1,8,2));
-        //r.clientes.add(new Cliente(2,7,18));
-        //r.clientes.add(new Cliente(3,6,4));
-        //r.clientes.add(new Cliente(4,5,16));
-        //r.clientes.add(new Cliente(5,4,6));
-        //r.clientes.add(new Cliente(6,3,14));
-        //r.clientes.add(new Cliente(7,2,8));
-        //r.clientes.add(new Cliente(8,1,12));
-        //r.clientes.add(new Cliente(9,0,10));
+        r.clientes.clear();
+        r.clientes.add(new Cliente(0,9,0));
+        r.clientes.add(new Cliente(1,8,2));
+        r.clientes.add(new Cliente(2,7,18));
+        r.clientes.add(new Cliente(3,6,4));
+        r.clientes.add(new Cliente(4,5,16));
+        r.clientes.add(new Cliente(5,4,6));
+        r.clientes.add(new Cliente(6,3,14));
+        r.clientes.add(new Cliente(7,2,8));
+        r.clientes.add(new Cliente(8,1,12));
+        r.clientes.add(new Cliente(9,0,10));
         
-        //r.capacidade = 30;
+        r.capacidade = 30;
         
-        //r.calcularDistancias();
+        r.calcularDistancias();
         //int[] cromossomo = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
         
-        //int[] cromossomo = {2, 4, 7, -1, 3, 6, 5, 8, 10, 9, -1};
-        //System.out.println(Arrays.toString(cromossomo));
-        //System.out.println();
+        int[] cromossomo = {2, 4, 7, -1, 2, -1, 5, 8, 10, 9, -1};
+        System.out.println(Arrays.toString(cromossomo));
+        System.out.println();
+        Correcao c = new Correcao(r.mapaDistancias);
+        
+        System.out.println(Arrays.toString(c.executar(cromossomo, r.qtdClientes, r.qtdRotas)));
         //for(int i = 0; i<r.qtdClientes; i++)
         //System.out.println(Arrays.toString(r.mapaDistancias[i]));
         
