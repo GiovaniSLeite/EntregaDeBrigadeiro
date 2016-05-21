@@ -10,4 +10,4 @@ Decidir o peso P para penalização (P*estouro)
 
 Talvez: Funções fitness alternativas (procurar na literatura).
 
-Operadores de Suporte e Otimização.
+Operadores de Otimização.
