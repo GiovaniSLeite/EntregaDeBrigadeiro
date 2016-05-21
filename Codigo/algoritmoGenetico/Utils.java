@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*-----------------|Classe Utils|-----------------/
 //Espaco de metodos utilitarios para calculos
@@ -156,47 +157,45 @@ public class Utils {
     //PayOff = distancia entre a e b - a distancia entre a e o primeiro da subrota do pai2 - distancia entre b e o ultimo da subrota do pai2 
     public static int[] InserirMelhorLugar(int[] filho, ArrayList<Integer> subrota2, double[][] dist)
     {
-    	//Inicializacao de variaveis
         int DEPOSITO = 0;
-        double maiorPayOff = Double.MIN_VALUE;
+    	int[] filhoAdaptado = Arrays.copyOf(filho, filho.length);
+        for(int i = 0; i < filhoAdaptado.length; i++)
+            if(filhoAdaptado[i] == -1) filhoAdaptado[i] = 1;
         
-        int ondeInserir = 0;
+        //distancias
+        double entreDepositoEPrimeiro = dist[DEPOSITO][filhoAdaptado[0]-1] - dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filhoAdaptado[0]-1];
+        double entreUltimoEDeposito = dist[filhoAdaptado[filhoAdaptado.length-1]-1][DEPOSITO] - dist[filhoAdaptado[filhoAdaptado.length-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][DEPOSITO];
         
-        for(int i =1; i < filho.length; i++)
+        double maiorPayOff;
+        int ondeInserir;
+        if(entreDepositoEPrimeiro > entreUltimoEDeposito)
         {
-            double payOff = 0.0;
+            maiorPayOff = entreDepositoEPrimeiro;
+            ondeInserir = 0;
+        }else
+        {
+            maiorPayOff = entreUltimoEDeposito;
+            ondeInserir = filhoAdaptado.length;
+        }
+        
+        for(int i = 1; i < filhoAdaptado.length; i++)
+        {
+            double payOff = dist[filhoAdaptado[i-1]-1][filhoAdaptado[i]-1] - dist[filhoAdaptado[i-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filhoAdaptado[i]-1];
             
-            // Insercao em uma rota vazia
-            if(filho[i-1] == -1 && filho [i] ==-1)
-            	payOff = 0 - dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][DEPOSITO];
-            
-            // Insercao entre o deposito e um cliente
-            else if(filho[i-1] == -1)
-                payOff = dist[DEPOSITO][filho[i]-1] - dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filho[i]-1];
-            
-            // Insercao entre um cleinte e o deposito
-            else if(filho[i] == -1)
-                payOff = dist[filho[i-1]-1][DEPOSITO] - dist[filho[i-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][DEPOSITO];
-            
-            // Insercao entre dois filhos
-            else
-                payOff = dist[filho[i-1]-1][filho[i]-1] - dist[filho[i-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filho[i]-1];
-
             if(payOff > maiorPayOff)
             {
                 maiorPayOff = payOff;
-                ondeInserir = i-1;
+                ondeInserir = i;
             }
         }
-            
-            //Novo filho
-            int[] novoFilho = new int[filho.length + subrota2.size()];
+        
+        int[] novoFilho = new int[filho.length + subrota2.size()];
             
             //As partes do filho sem os clientes da subrota do pai 2
-            for(int i =0; i <= ondeInserir; i++)
+            for(int i =0; i < ondeInserir; i++)
                 novoFilho[i] = filho[i];
 
-            int indice = ondeInserir+1;
+            int indice = ondeInserir;
             
             //A subrota do pai 2 inserida no melhor lugar
             for(int aux : subrota2)
@@ -214,34 +213,34 @@ public class Utils {
     {
     	//Iniciaizacao de variaveis
         int DEPOSITO = 0;
-        double maiorPayOff = 0.0;
-        int ondeInserir = 0;
+        int[] filhoAdaptado = Arrays.copyOf(filho, filho.length);
+        for(int i = 0; i < filhoAdaptado.length; i++)
+            if(filhoAdaptado[i] == -1) filhoAdaptado[i] = 1;
         
-        for(int i =1; i < filho.length; i++)
-        {   
-            double payOff = Double.MIN_VALUE;
+        //distancias
+        double entreDepositoEPrimeiro = dist[DEPOSITO][filhoAdaptado[0]-1] - dist[DEPOSITO][cliente-1] - dist[cliente-1][filhoAdaptado[0]-1];
+        double entreUltimoEDeposito = dist[filhoAdaptado[filhoAdaptado.length-1]-1][DEPOSITO] - dist[filhoAdaptado[filhoAdaptado.length-1]-1][cliente-1] - dist[cliente-1][DEPOSITO];
+        
+        double maiorPayOff;
+        int ondeInserir;
+        if(entreDepositoEPrimeiro > entreUltimoEDeposito)
+        {
+            maiorPayOff = entreDepositoEPrimeiro;
+            ondeInserir = 0;
+        }else
+        {
+            maiorPayOff = entreUltimoEDeposito;
+            ondeInserir = filhoAdaptado.length;
+        }
+        
+        for(int i = 1; i < filhoAdaptado.length; i++)
+        {
+            double payOff = dist[filhoAdaptado[i-1]-1][filhoAdaptado[i]-1] - dist[filhoAdaptado[i-1]-1][cliente-1] - dist[cliente-1][filhoAdaptado[i]-1];
             
-            //Inserir numa rota vazia
-            if(filho[i-1] == -1 && filho [i] ==-1)
-            	payOff = 0 - dist[DEPOSITO][cliente-1] * 2;
-            
-            //Inserir entre o deposito e um filho
-            else if(filho[i-1] == -1)
-                 payOff = dist[DEPOSITO][filho[i]-1] - dist[DEPOSITO][cliente-1] - dist[cliente-1][filho[i]-1];
-            
-            //inserir entre um filho e o deposito
-            else if(filho[i] == -1)
-                payOff = dist[filho[i-1]-1][DEPOSITO] - dist[filho[i-1]-1][cliente-1] - dist[cliente-1][DEPOSITO];
-            
-            //Inserir entre dois filhos
-            else
-                payOff = dist[filho[i-1]-1][filho[i]-1] - dist[filho[i-1]-1][cliente-1] - dist[cliente-1][filho[i]-1];
-
-            //Se o payOff for maior, substituir
             if(payOff > maiorPayOff)
             {
                 maiorPayOff = payOff;
-                ondeInserir = i-1;
+                ondeInserir = i;
             }
         }
             
@@ -249,13 +248,13 @@ public class Utils {
             int[] novoFilho = new int[filho.length + 1];
             
             //As partes do filho sem os clientes da subrota do pai 2
-            for(int i =0; i <= ondeInserir; i++)
+            for(int i =0; i < ondeInserir; i++)
                 novoFilho[i] = filho[i];
             
-            novoFilho[ondeInserir+1] = cliente;
+            novoFilho[ondeInserir] = cliente;
         
             //O restante que compoe o filho
-            for(int i = ondeInserir+2; i < novoFilho.length; i++)
+            for(int i = ondeInserir+1; i < novoFilho.length; i++)
                 novoFilho[i] = filho[i-1];
             
             return novoFilho;
