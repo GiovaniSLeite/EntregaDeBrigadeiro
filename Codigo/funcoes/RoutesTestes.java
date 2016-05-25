@@ -4,12 +4,11 @@ package funcoes;
 import Operadores.*;
 import algoritmoGenetico.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class RoutesTestes extends AlgoritmosGeneticos {
 	
 	private static final int DEPOSITO = 0;
-        double pesoPenalizacao = 10;
+        
     public RoutesTestes(int qRotas, ArrayList<Cliente> aux)
     {
         this.qtdRotas = qRotas;
@@ -55,38 +54,42 @@ public class RoutesTestes extends AlgoritmosGeneticos {
         
         
         //Modelo de brinquedo
-        r.qtdClientes = 10;
-        r.qtdRotas = 3;
-        
-        r.clientes.clear();
-        r.clientes.add(new Cliente(0,9,0));
-        r.clientes.add(new Cliente(1,8,2));
-        r.clientes.add(new Cliente(2,7,18));
-        r.clientes.add(new Cliente(3,6,4));
-        r.clientes.add(new Cliente(4,5,16));
-        r.clientes.add(new Cliente(5,4,6));
-        r.clientes.add(new Cliente(6,3,14));
-        r.clientes.add(new Cliente(7,2,8));
-        r.clientes.add(new Cliente(8,1,12));
-        r.clientes.add(new Cliente(9,0,10));
-        
-        r.capacidade = 30;
-        
+//        r.qtdClientes = 5;
+//        r.qtdRotas = 3;
+//        
+//        r.clientes.clear();
+//        r.clientes.add(new Cliente(0,0,0));
+//        r.clientes.add(new Cliente(3,3,25));
+//        r.clientes.add(new Cliente(1,5,25));
+//        r.clientes.add(new Cliente(6,2,8));
+//        r.clientes.add(new Cliente(2,4,4));
+//        
+//        
+//        r.capacidade = 40;
+//        
         r.calcularDistancias();
         
-        int[] cromossomo1 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
-        int[] cromossomo2 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
-        
-        System.out.println(Arrays.toString(cromossomo1));
-        System.out.println(Arrays.toString(cromossomo2));
-        
-        System.out.println();
-        
-        int[][] retorno = r.crossover.executar(cromossomo1, cromossomo2);
-        System.out.println(Arrays.toString(retorno[0]));
-        System.out.println(Arrays.toString(retorno[1]));
-        
-        //int[] cromossomo = {2, 4, 7, -1, 2, -1, 5, 8, 10, 9, -1};
+        System.out.println(r.fitness(new int[]{22,32,20,18,14,8,27, -1, 13, 2, 17, 31, -1, 28, 25, -1, 30, 19, 9, 10, 23, 16, 11, 26, 6, 21, -1, 15, 29, 12, 5, 24, 4, 3 ,7}));
+        //System.out.println(r.fitness(new int[]{22, 32, 20, 18, 14, 8, 27, -1, 13, 2, 17, 31, -1, 28, 25, -1, 30, 19, 9, 10, 23, 16, 11, 26, 6, 21, -1, 15, 29, 12, 5, 24, 4, 3, 7}))
+//        for(double[] kk : r.mapaDistancias)
+//            System.out.println(Arrays.toString(kk));
+//        
+////        int[] cromossomo1 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
+////        int[] cromossomo2 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
+////        
+////        System.out.println(Arrays.toString(cromossomo1));
+////        System.out.println(Arrays.toString(cromossomo2));
+////        
+////        System.out.println();
+////        
+////        int[][] retorno = r.crossover.executar(cromossomo1, cromossomo2);
+////        System.out.println(Arrays.toString(retorno[0]));
+////        System.out.println(Arrays.toString(retorno[1]));
+//        
+//        int[] cromossomo = {3, 2, -1, 4, -1, 5};
+//        RepairingOperator abcd = new RepairingOperator();
+//        cromossomo = abcd.executar(cromossomo, r.clientes, r.capacidade);
+//        System.out.println(Arrays.toString(cromossomo));
         //System.out.println(Arrays.toString(cromossomo));
         //System.out.println();
         //Correcao c = new Correcao(r.mapaDistancias);
@@ -138,7 +141,7 @@ public class RoutesTestes extends AlgoritmosGeneticos {
     	if (genotipo[genotipo.length-1] != -1 && anterior != -1)
     		distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
     	
-    	return distanciaPercorrida+this.pesoPenalizacao*penalizar(genotipo);
+    	return distanciaPercorrida+penalizar(genotipo);
     }
     
     public double fitnessAntigo(int[] genotipo) {
@@ -173,7 +176,7 @@ public class RoutesTestes extends AlgoritmosGeneticos {
         
         if(genotipo[genotipo.length-1] != -1 && anterior != null) distanciaPercorrida += anterior.distancia(depot);
         
-        return distanciaPercorrida+this.pesoPenalizacao*penalizar(genotipo);
+        return distanciaPercorrida+penalizar(genotipo);
     }
     
     public int penalizar(int [] genotipo)
@@ -191,6 +194,12 @@ public class RoutesTestes extends AlgoritmosGeneticos {
         
         return penalizacao;
         
+    }
+
+    public void calcAlpha()
+    {
+        double mnv = (double) Utils.demandaTotal(clientes)/capacidade;
+        this.alpha = fitness(this.getBetter().genotipo)/((1/IT)*Math.pow(mnv/2 * capacidade, 2));
     }
     
 }
