@@ -1,8 +1,7 @@
 package algoritmoGenetico;
 
 
-import Operadores.Crossover;
-import Operadores.Mutacao;
+import Operadores.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,11 +22,11 @@ public abstract class AlgoritmosGeneticos {
     List<Individuo> geracaoRoleta;
     
     //indGeracao -> Indicador da geracao em que a populacao esta
-    int indGeracao;
+    protected int indGeracao;
 
     //qtdRotas = quantidade de carros
     //qtdClientes = Quantidade de clientes (incluindo o deposito)
-    //capacidade = Capacidade que todos os carros têm de carregar (em qtd de objetos)
+    //capacidade = Capacidade que todos os carros t�m de carregar (em qtd de objetos)
     protected int qtdRotas;
     protected int qtdClientes;
     protected int capacidade;
@@ -66,9 +65,6 @@ public abstract class AlgoritmosGeneticos {
 
     //Probabilidade de mutacao
     protected double probMutacao;
-    
-    //Probabilidade especial de inserir no melhor lugar -> Mutacao dirigida
-    protected double probEspecial;
 
     //Criterio de Troca
     protected int critTroca;
@@ -78,17 +74,16 @@ public abstract class AlgoritmosGeneticos {
     //Elitismo?
     protected boolean elitismo;
     
-    //Operadores de suporte?
-    protected boolean suporte;
-    
-    //Operadores de correcao?
-    protected boolean correcao;
-    
     //Intervalo de impressao
     protected int intervaloImpressao;
     
     //Mapa de Distancias
     protected double[][] mapaDistancias;
+    
+    //Numero total de iteracoes
+    protected static final int IT = 10000;
+    protected double alpha = 10;
+    
     
     /*-----------------| Espaco dos Metodos |-----------------*/
     //Construtor -> Por enquanto so inicializa rand
@@ -103,6 +98,7 @@ public abstract class AlgoritmosGeneticos {
     O genotipo eh convertido em fenotipo dentro do metodo
     |-----------------*/
     protected abstract double fitness(int[] genotipo);
+    protected abstract void calcAlpha();
     
     /*-----------------|
     Calcula o fitness total de toda a populacao
@@ -237,7 +233,7 @@ public abstract class AlgoritmosGeneticos {
     /*-----------------|
     Metodo que retorna o individuo mais bem adaptado (com melhor fitness) da geracao atual
     |-----------------*/
-    Individuo getBetter() {
+    public Individuo getBetter() {
             return geracao.get(0);
     }
     
@@ -266,7 +262,8 @@ public abstract class AlgoritmosGeneticos {
         
         this.geradorInicial(); //Gerar primeira populacao
         this.indGeracao = 1; //Numero da geracao
-        
+        Collections.sort(geracao);
+        this.calcAlpha();
         
         
         
@@ -299,9 +296,16 @@ public abstract class AlgoritmosGeneticos {
                     //b) Efetuar o cruzamento e gerar os filhos
                     int[][] filhos = crossover.executar(pais[0].getGenotipo(), pais[1].getGenotipo());
 
+                    
                     //c) Adicionar os filhos a lista
-                    for(int[] aux : filhos)
+                    for(int[] aux : filhos){
+                      //  RepairingOperator ro = new RepairingOperator();
+                        Otimizacao o = new Otimizacao(mapaDistancias);
+                        //aux = ro.executar(aux, clientes, capacidade);
+                        aux = o.executar(aux);
+                        
                         proxFilhos.add(new Individuo(aux, fitness(aux)));
+                    }
                 }
             }
 
