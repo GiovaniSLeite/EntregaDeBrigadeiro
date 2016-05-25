@@ -10,8 +10,8 @@ import java.util.Random;
 Essa classe contem o genotipo e o fitness de cada individuo
 /-----------------|                 |-----------------*/
 public class Individuo implements Comparable<Individuo>{
-    private int [] genotipo;
-    protected double fitness;
+    public int [] genotipo;
+    public double fitness;
     
     /*-----------------|
     O metodo construcao recebe o vetor genotipo e o fitness como parametros
