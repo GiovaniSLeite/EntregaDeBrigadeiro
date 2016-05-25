@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /*-----------------|Classe Utils|-----------------/
 //Espaco de metodos utilitarios para calculos
@@ -347,6 +348,16 @@ public class Utils {
         }
         
         return genotipo;
+    }
+    
+    public static int demandaTotal(List<Cliente> clientes)
+    {
+        int total = 0;
+        
+        for(Cliente cli : clientes)
+            total += cli.demanda;
+        
+        return total;
     }
 
 }
