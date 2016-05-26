@@ -4,6 +4,7 @@ package Operadores;
 import algoritmoGenetico.Cliente;
 import algoritmoGenetico.Utils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -16,7 +17,6 @@ public class RepairingOperator {
     public int[] executar(int [] genotipo, List<Cliente> clientes, int capacidade)
     {
         ArrayList<ArrayList<Integer>> rotas = Utils.getRotas(genotipo);
-        
         double maiorCusto = Double.MIN_VALUE;
         int maisCustosa = 0;
         double menorCusto = Double.MAX_VALUE;
