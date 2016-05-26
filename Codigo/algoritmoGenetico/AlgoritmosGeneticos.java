@@ -299,11 +299,12 @@ public abstract class AlgoritmosGeneticos {
                     
                     //c) Adicionar os filhos a lista
                     for(int[] aux : filhos){
-                      //  RepairingOperator ro = new RepairingOperator();
+                        RepairingOperator ro = new RepairingOperator();
                         Otimizacao o = new Otimizacao(mapaDistancias);
-                        //aux = ro.executar(aux, clientes, capacidade);
-                        aux = o.executar(aux);
-                        
+                        aux = ro.executar(aux, clientes, capacidade);
+                        //aux = o.executar(aux);
+                        if(rand.nextDouble()>0.2)
+                            aux = o.executar(aux);
                         proxFilhos.add(new Individuo(aux, fitness(aux)));
                     }
                 }
@@ -329,7 +330,9 @@ public abstract class AlgoritmosGeneticos {
             
             //Caso nao seja por substituicao, a geracao atual e acrescida aos possiveis integrantes da proxima
             if (this.critTroca == SEM_SUBST) {
-                proxFilhos.addAll(this.geracao); 
+                for(Individuo pai : geracao)
+                    proxFilhos.add(new Individuo(pai.genotipo, fitness(pai.genotipo)));//Atualiza fitness
+                
             } else //Se for aplicada troca com substituicao de populacao, verificar se vai ser aplicado elitismo
              if (this.elitismo) {
                     proxFilhos.add(this.getBetter());

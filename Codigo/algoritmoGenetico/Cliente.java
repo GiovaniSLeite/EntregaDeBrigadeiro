@@ -15,7 +15,7 @@ public class Cliente {
     //Metodo que calcula a distancia entre o cliente (instancia) e outro cliente
     public double distancia(Cliente o)
     {
-        return Math.round(Math.sqrt(Math.pow((this.x - o.x), 2) + Math.pow((this.y - o.y), 2)));
+        return Math.sqrt(Math.pow((this.x - o.x), 2) + Math.pow((this.y - o.y), 2));
     }
     
     //Impressao
