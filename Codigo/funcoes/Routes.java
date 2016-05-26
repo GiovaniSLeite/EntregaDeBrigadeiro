@@ -24,15 +24,15 @@ public class Routes extends AlgoritmosGeneticos {
         ArrayList<Cliente> aux = Utils.getClientes("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-n32-k5.vrp");
         Routes r = new Routes(qRotas, aux);
         r.capacidade = 100;
-        r.numIndividuos = 1500;
+        r.numIndividuos = 10000;
         r.critParada = 0;
         r.numGeracoes = 30;
         r.numCross = r.numIndividuos;
         r.crossover = new CrossoverOXadaptado();
         r.probCrossover = 0.9;
         r.mutacao = new MutationSimpleRandom(r.mapaDistancias, r.qtdRotas);
-        r.probMutacao = 0.05;
-        r.critTroca = 0;
+        r.probMutacao = 0.2;
+        r.critTroca = 1;
         r.elitismo = false;
         r.intervaloImpressao = 5;
         //PARA VER MATRIZ DE DISTANCIA P/ EXCEL
@@ -47,8 +47,8 @@ public class Routes extends AlgoritmosGeneticos {
         //    System.out.println(s);
 //        System.out.println(r.clientes);
         r.evolucao();
-//        System.out.println(r.fitness(new int[]{22,32,20,18,14,8,27, -1, 13, 2, 17, 31, -1, 28, 25, -1, 30, 19, 9, 10, 23, 16, 11, 26, 6, 21, -1, 15, 29, 12, 5, 24, 4, 3 ,7}));
-//        System.out.println(r.penalizar(new int[]{21, 6, 26, 11, 30, 16, 23, 10, 19, 9, 12, 5, 29, 24, 3, 4, 7, -1, -1, 8, 14, 18, 20, 32, 22, 2, -1, -1, 31, 13, 17, 27, 15, 25, 28}));
+        System.out.println(r.fitness(new int[]{22,32,20,18,14,8,27, -1, 13, 2, 17, 31, -1, 28, 25, -1, 30, 19, 9, 10, 23, 16, 11, 26, 6, 21, -1, 15, 29, 12, 5, 24, 4, 3 ,7}));
+        //System.out.println(r.penalizar(new int[]{9, 12, 5, 29, 24, 3, 4, 7, -1, 28, 25, -1, 18, 20, 32, 22, 14, 8, 27, -1, 13, 2, 17, 31, -1, 21, 6, 26, 11, 30, 16, 23, 10, 19, 15}));
 //        System.out.println(r.fitness(new int[]{21, 6, 26, 11, 30, 16, 23, 10, 19, 9, 12, 5, 29, 24, 3, 4, 7, -1, -1, 8, 14, 18, 20, 32, 22, 2, -1, -1, 31, 13, 17, 27, 15, 25, 28}));
         
         
@@ -136,7 +136,7 @@ public class Routes extends AlgoritmosGeneticos {
     	if (genotipo[genotipo.length-1] != -1 && anterior != -1)
     		distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
     	//System.out.println("PENANDO: " + ((double)this.indGeracao/this.IT)*this.alpha + " "+ penalizar(genotipo));
-    	return distanciaPercorrida+ ((double)this.indGeracao/this.IT)*10*this.alpha*penalizar(genotipo);
+    	return distanciaPercorrida+ ((double)this.indGeracao/this.IT)*this.alpha*penalizar(genotipo);
     }
     
     public int penalizar(int [] genotipo)
