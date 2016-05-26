@@ -297,12 +297,13 @@ public class Utils {
                     if(!aux.contains(genotipo[i]))
                         aux.add(genotipo[i++]);
                     else
-                        i++;
-                
-                rotas.add(aux);
-            }   
+                        i++;    
+            }
+            rotas.add(aux);
+            
         }
         
+        if(genotipo[genotipo.length-1] == -1) rotas.add(new ArrayList<Integer>());
         return rotas;
     }
     
