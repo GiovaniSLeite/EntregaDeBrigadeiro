@@ -2,13 +2,14 @@
 package Operadores;
 
 import algoritmoGenetico.Utils;
+import java.util.Arrays;
 import java.util.Random;
 
 public class MutationSimpleRandom extends Mutacao{
     //Matriz de distancias de locais
 	double dist[][];
     Random rand;
-    //Probabilidade especial de inserir um gene aleatório no melhor lugar possível para ele
+    //Probabilidade especial de inserir um gene aleatï¿½rio no melhor lugar possï¿½vel para ele
     double ProbEspecial;
     
     public MutationSimpleRandom(double[][] distancias, double prob){    
@@ -23,10 +24,9 @@ public class MutationSimpleRandom extends Mutacao{
         
         int p = individuo[rand.nextInt(individuo.length)];
         int [] mutante;
-        
         //Se o gene mutante for um carro, nao fazer mutacao
-        if(p != -1)
-            mutante = individuo;
+        if(p == -1)
+            mutante = Arrays.copyOf(individuo, individuo.length);
         else{
         	//Remover o gene mutante do individuo
             mutante = Utils.removeClientes(individuo, p);
@@ -35,8 +35,8 @@ public class MutationSimpleRandom extends Mutacao{
             if(rand.nextDouble() <= ProbEspecial)
                 mutante = Utils.inserirMelhorLugar(mutante, p, dist);
             else
-            	//Ou então inserir num lugar aleatorio
-                mutante = Utils.inserirAleatorio(individuo, p, rand.nextInt(individuo.length+1));
+            	//Ou entï¿½o inserir num lugar aleatorio
+                mutante = Utils.inserirAleatorio(mutante, p, rand.nextInt(individuo.length+1));
         }
             
         return mutante;

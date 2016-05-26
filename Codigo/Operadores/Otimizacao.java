@@ -1,7 +1,6 @@
 package Operadores;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import algoritmoGenetico.Utils;
@@ -38,15 +37,15 @@ public class Otimizacao {
 		
 		//Otimizar a subrota
 		subrota = this.ap2opt(subrota);
-		
-		//Colocar a nova subrota no genotipo
-		for(i = 0; i < genotipo.length; i++)
-			if(genotipo[i]==subRota.get(0))
-				break;
-		
-		for(j = 0; j < subrota.length; j++)
-			genotipo[i++] = subrota[j];
-		
+		if(subRota.size() > 0){
+                    //Colocar a nova subrota no genotipo
+                    for(i = 0; i < genotipo.length; i++)
+                            if(genotipo[i]==subRota.get(0))
+                                    break;
+
+                    for(j = 0; j < subrota.length; j++)
+                            genotipo[i++] = subrota[j];
+                }
 		return genotipo;
 	}
 	
@@ -87,7 +86,7 @@ public class Otimizacao {
 				}
 			}
 			
-			//Rearranjar os valores no genotipo é trocar de posicao
+			//Rearranjar os valores no genotipo Ã© trocar de posicao
 			if(melhora > 0)
 			{
 			//jogar t4 no lugar de t2 e t2 no lugar de t4
