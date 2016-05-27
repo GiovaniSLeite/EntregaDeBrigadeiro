@@ -20,84 +20,61 @@ public class Routes extends AlgoritmosGeneticos {
     public static void main(String[] args)
     {
        
-        int qRotas = Utils.getQtdRotas("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-n32-k5.vrp");
-        ArrayList<Cliente> aux = Utils.getClientes("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-n32-k5.vrp");
+        /*args
+        0 - nome do arquivo teste
+        1 - ID
+        2 - Numero de individuos
+        3 - criterio de parada
+        4 - numero de geracoes
+        5 - numero de crossovers
+        6 - tipo do crossover
+        7 - probabilidade do crossover
+        8 - tipo da mutacao
+        9 - probabilidade da mutacao
+        10 - prob especial
+        11 - criterio de troca
+        12 - elitismo
+        13 - intervalo de impressao
+        */
+        //args = new String []{"A-n32-k5.vrp", "1"};
+        String arquivoTeste = "C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-VRP\\"+args[0];
+        int qRotas = Utils.getQtdRotas(arquivoTeste);
+        ArrayList<Cliente> aux = Utils.getClientes(arquivoTeste);
         Routes r = new Routes(qRotas, aux);
-        r.capacidade = 100;
-        r.numIndividuos = 10000;
-        r.critParada = 0;
-        r.numGeracoes = 30;
-        r.numCross = r.numIndividuos;
-        r.crossover = new CrossoverOXadaptado();
-        r.probCrossover = 0.9;
-        r.mutacao = new MutationSimpleRandom(r.mapaDistancias, r.qtdRotas);
-        r.probMutacao = 0.2;
-        r.critTroca = 1;
-        r.elitismo = false;
-        r.intervaloImpressao = 5;
-        //PARA VER MATRIZ DE DISTANCIA P/ EXCEL
-        //for(double[] linhas : r.mapaDistancias){
-            //for(double abc : linhas)
-            //    System.out.print(abc+"\t");
-          //  System.out.println();
-        //}
-        //PARA VER X E Y DE CLIENTES PARA EXCEL
-        //System.out.println("\n******************\n");
-        //for(Cliente s : r.clientes)
-        //    System.out.println(s);
-//        System.out.println(r.clientes);
+        r.ID = Integer.parseInt(args[1]);
+        r.capacidade = Utils.getCapacity(arquivoTeste);
+        r.numIndividuos = Integer.parseInt(args[2]);
+        r.critParada = Integer.parseInt(args[3]);
+        r.numGeracoes = Integer.parseInt(args[4]);
+        r.numCross = Integer.parseInt(args[5])*r.numIndividuos;
+        r.crossover = args[6].equals("0") ? new CrossoverUmPonto() : args[6].equals("1") ? new CrossoverDoisPontos() : args[6].equals("2") ? new CrossoverSimpleRandom(r.mapaDistancias) : new CrossoverOXadaptado();
+        r.probCrossover = Double.parseDouble(args[7]);
+        r.mutacao = args[8].equals("0") ? new MutacaoSimples() : args[8].equals("1") ? new MutacaoTroca() : new MutationSimpleRandom(r.mapaDistancias, Double.parseDouble(args[10]));
+        r.probMutacao = Double.parseDouble(args[9]);
+        r.critTroca = Integer.parseInt(args[11]);
+        r.elitismo = args[12].equals("true");
+        r.intervaloImpressao = Integer.parseInt(args[13]);
+        
+//        int qRotas = Utils.getQtdRotas("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-VRP\\A-n32-k5.vrp");
+//        ArrayList<Cliente> aux = Utils.getClientes("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-VRP\\A-n32-k5.vrp");
+//        Routes r = new Routes(qRotas, aux);
+//        
+//        
+//        r.capacidade = 100;
+//        r.numIndividuos = 10000;
+//        r.critParada = 0;
+//        r.numGeracoes = 30;
+//        r.numCross = r.numIndividuos;
+//        r.crossover = new CrossoverOXadaptado();
+//        r.probCrossover = 1;
+//        r.mutacao = new MutationSimpleRandom(r.mapaDistancias, r.qtdRotas);
+//        r.probMutacao = 0.2;
+//        r.critTroca = 1;
+//        r.elitismo = false;
+//        r.intervaloImpressao = 5;
+        
         r.evolucao();
-        System.out.println(r.fitness(new int[]{22,32,20,18,14,8,27, -1, 13, 2, 17, 31, -1, 28, 25, -1, 30, 19, 9, 10, 23, 16, 11, 26, 6, 21, -1, 15, 29, 12, 5, 24, 4, 3 ,7}));
-        //System.out.println(r.penalizar(new int[]{9, 12, 5, 29, 24, 3, 4, 7, -1, 28, 25, -1, 18, 20, 32, 22, 14, 8, 27, -1, 13, 2, 17, 31, -1, 21, 6, 26, 11, 30, 16, 23, 10, 19, 15}));
-//        System.out.println(r.fitness(new int[]{21, 6, 26, 11, 30, 16, 23, 10, 19, 9, 12, 5, 29, 24, 3, 4, 7, -1, -1, 8, 14, 18, 20, 32, 22, 2, -1, -1, 31, 13, 17, 27, 15, 25, 28}));
         
-        
-        //Modelo de brinquedo
-//        r.qtdClientes = 10;
-//        r.qtdRotas = 3;
-//        
-//        r.clientes.clear();
-//        r.clientes.add(new Cliente(0,9,0));
-//        r.clientes.add(new Cliente(1,8,2));
-//        r.clientes.add(new Cliente(2,7,18));
-//        r.clientes.add(new Cliente(3,6,4));
-//        r.clientes.add(new Cliente(4,5,16));
-//        r.clientes.add(new Cliente(5,4,6));
-//        r.clientes.add(new Cliente(6,3,14));
-//        r.clientes.add(new Cliente(7,2,8));
-//        r.clientes.add(new Cliente(8,1,12));
-//        r.clientes.add(new Cliente(9,0,10));
-//        
-//        r.capacidade = 30;
-//        
-//        r.calcularDistancias();
-//        
-//        int[] cromossomo1 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
-//        int[] cromossomo2 = Individuo.cromossomoAleatorio(r.qtdRotas, r.qtdClientes);
-//        
-//        System.out.println(Arrays.toString(cromossomo1));
-//        System.out.println(Arrays.toString(cromossomo2));
-//        
-//        System.out.println();
-//        
-//        int[][] retorno = r.crossover.executar(cromossomo1, cromossomo2);
-//        System.out.println(Arrays.toString(retorno[0]));
-//        System.out.println(Arrays.toString(retorno[1]));
-        
-        //int[] cromossomo = {2, 4, 7, -1, 2, -1, 5, 8, 10, 9, -1};
-        //System.out.println(Arrays.toString(cromossomo));
-        //System.out.println();
-        //Correcao c = new Correcao(r.mapaDistancias);
-        
-        //System.out.println(Arrays.toString(c.executar(cromossomo, r.qtdClientes, r.qtdRotas)));
-        //for(int i = 0; i<r.qtdClientes; i++)
-        //System.out.println(Arrays.toString(r.mapaDistancias[i]));
-        
-        //System.out.println();
-        
-        //System.out.println(r.fitness(cromossomo));
-        //System.out.println(r.fitnessAntigo(cromossomo));
-        //System.out.println(r.fitness(new int[]{22, 32, 20, 18, 14, 8, 27, -1, 13, 2, 17, 31, -1, 28, 25, -1, 30, 19, 9, 10, 23, 16, 11, 26, 6, 21, -1, 15, 29, 12, 5, 24, 4, 3, 7}));
     }
     
     protected double fitness(int[] genotipo)
