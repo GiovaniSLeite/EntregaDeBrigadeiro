@@ -65,7 +65,18 @@ public abstract class AlgoritmosGeneticos {
 
     //Probabilidade de mutacao
     protected double probMutacao;
-
+    
+    protected Correcao corretor;
+    //Probabilidade de correcao
+    protected double probCorrecao;
+    
+    protected RepairingOperator reparador;
+    //Probabilidade de repairing
+    protected double probReparacao;
+   
+    protected Otimizacao otimizador;
+    //Probabilidade de otimizacao
+    protected double probOtimizacao;
     //Criterio de Troca
     protected int critTroca;
     private static final int COM_SUBST = 0;
@@ -302,12 +313,15 @@ public abstract class AlgoritmosGeneticos {
                     
                     //c) Adicionar os filhos a lista
                     for(int[] aux : filhos){
-                        RepairingOperator ro = new RepairingOperator();
-                        Otimizacao o = new Otimizacao(mapaDistancias);
-                        aux = ro.executar(aux, clientes, capacidade);
-                        //aux = o.executar(aux);
-                        if(rand.nextDouble()<=0.5)
-                            aux = o.executar(aux);
+                        //Aplicacao do corretor
+                        if(rand.nextDouble() < probCorrecao)
+                            aux = corretor.executar(aux, qtdClientes, qtdRotas);
+                        //Aplicacao do reparador
+                        if(rand.nextDouble() < probReparacao)
+                            aux = reparador.executar(aux, clientes, capacidade);
+                        //Aplicacao do otimizador
+                        if(rand.nextDouble() < probOtimizacao)
+                            aux = otimizador.executar(aux);                        
                         proxFilhos.add(new Individuo(aux, fitness(aux)));
                     }
                 }
