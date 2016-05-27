@@ -84,6 +84,9 @@ public abstract class AlgoritmosGeneticos {
     protected static final int IT = 10000;
     protected double alpha = 10;
     
+    //id da execucao
+    public int ID;
+    
     
     /*-----------------| Espaco dos Metodos |-----------------*/
     //Construtor -> Por enquanto so inicializa rand
@@ -303,7 +306,7 @@ public abstract class AlgoritmosGeneticos {
                         Otimizacao o = new Otimizacao(mapaDistancias);
                         aux = ro.executar(aux, clientes, capacidade);
                         //aux = o.executar(aux);
-                        if(rand.nextDouble()>0.2)
+                        if(rand.nextDouble()<=0.5)
                             aux = o.executar(aux);
                         proxFilhos.add(new Individuo(aux, fitness(aux)));
                     }
