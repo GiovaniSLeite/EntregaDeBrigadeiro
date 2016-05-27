@@ -88,6 +88,24 @@ public class Utils {
         return resp;
     }
     
+    public static int getCapacity(String arq){
+        int resp = 0;
+        try {
+            BufferedReader ler = new BufferedReader(new FileReader(new File(arq)));
+            String linha = "";
+            
+            while(!(linha = ler.readLine()).contains("CAPACITY")){}
+            
+            String[] comment = linha.split(":");
+            resp = Integer.valueOf(comment[1].trim());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return resp;
+    }
+    
     //Metodo que recebe um genotipo, uma posicao, e retorna a rota
     //em que esse cliente esta inserido
     //Pre-requisito: posicao deve ser um cliente e nao um carro
