@@ -409,7 +409,7 @@ public abstract class AlgoritmosGeneticos {
     |-----------------*/
     public void imprimirRelatorio(String r)
     {
-        String nome = "ROTAS";
+        String nome = "n"+qtdClientes+"k"+qtdRotas+"-"+ID;
         //Nome da funcao que esta sendo rodada
         
         //Cria o arquivo
