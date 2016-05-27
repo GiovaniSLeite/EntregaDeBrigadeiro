@@ -34,9 +34,11 @@ public class Routes extends AlgoritmosGeneticos {
         10 - prob especial
         11 - criterio de troca
         12 - elitismo
-        13 - intervalo de impressao
+        13 - prob correcao
+        14 - prob reparação (caso de capacidade)
+        15 - prob otimizacao
+        16 - intervalo de impressao
         */
-        //args = new String []{"A-n32-k5.vrp", "1"};
         String arquivoTeste = "C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-VRP\\"+args[0];
         int qRotas = Utils.getQtdRotas(arquivoTeste);
         ArrayList<Cliente> aux = Utils.getClientes(arquivoTeste);
@@ -53,25 +55,13 @@ public class Routes extends AlgoritmosGeneticos {
         r.probMutacao = Double.parseDouble(args[9]);
         r.critTroca = Integer.parseInt(args[11]);
         r.elitismo = args[12].equals("true");
-        r.intervaloImpressao = Integer.parseInt(args[13]);
-        
-//        int qRotas = Utils.getQtdRotas("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-VRP\\A-n32-k5.vrp");
-//        ArrayList<Cliente> aux = Utils.getClientes("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-VRP\\A-n32-k5.vrp");
-//        Routes r = new Routes(qRotas, aux);
-//        
-//        
-//        r.capacidade = 100;
-//        r.numIndividuos = 10000;
-//        r.critParada = 0;
-//        r.numGeracoes = 30;
-//        r.numCross = r.numIndividuos;
-//        r.crossover = new CrossoverOXadaptado();
-//        r.probCrossover = 1;
-//        r.mutacao = new MutationSimpleRandom(r.mapaDistancias, r.qtdRotas);
-//        r.probMutacao = 0.2;
-//        r.critTroca = 1;
-//        r.elitismo = false;
-//        r.intervaloImpressao = 5;
+        r.corretor = new Correcao(r.mapaDistancias);
+        r.probCorrecao = Double.parseDouble(args[13]);
+        r.reparador = new RepairingOperator();
+        r.probReparacao = Double.parseDouble(args[14]);
+        r.otimizador = new Otimizacao(r.mapaDistancias);
+        r.probOtimizacao = Double.parseDouble(args[15]);
+        r.intervaloImpressao = Integer.parseInt(args[16]);
         
         r.evolucao();
         
