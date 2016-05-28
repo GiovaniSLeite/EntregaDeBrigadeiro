@@ -3,20 +3,22 @@ package Operadores;
 
 import algoritmoGenetico.Utils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 
 public class Correcao {
     static Random rand;
     double[][] dist;
-    
-    public Correcao(double [][] dist)
+    double probEspecial;
+    public Correcao(double [][] dist, double pb)
     {
         this.dist = dist;
         rand = new Random();
+        probEspecial = pb;
     }
     
-    //Método executar, recebe um genótipo e o devolve corrigido.
+    //Mtodo executar, recebe um gentipo e o devolve corrigido.
     public int[] executar(int[] genotipo, int clientes, int motoristas)
     {
         //Pega as rotas do genotipo - se existirem clientes repetidos
@@ -46,7 +48,7 @@ public class Correcao {
         
         //Seleciona os clientes faltantes
         ArrayList<Integer> clientesFaltantes = new ArrayList();
-        for(int i = 2; i < clientes; i++)
+        for(int i = 2; i <= clientes; i++)
             clientesFaltantes.add(i);
         for(ArrayList<Integer> subRotas : rotas)
             clientesFaltantes.removeAll(subRotas);
@@ -54,9 +56,12 @@ public class Correcao {
         //Transforma em um genotipo
         genotipo = Utils.converteListasEmGenotipo(rotas);
         
-        //Para cada cliente faltante, inserir no melhor lugar possível
-        for(int cl : clientesFaltantes)
-            genotipo = Utils.inserirMelhorLugar(genotipo, cl, dist);
+        Collections.shuffle(clientesFaltantes);
+        //Para cada cliente faltante, inserir no melhor lugar possï¿½vel
+        for(Integer cl : clientesFaltantes)
+            if(probEspecial <= rand.nextDouble())
+                genotipo = Utils.inserirAleatorio(genotipo, cl, rand.nextInt(genotipo.length+1)); 
+            else genotipo = Utils.inserirMelhorLugar(genotipo, cl, dist);
      
         return genotipo;
     }

@@ -1,7 +1,6 @@
 package Operadores;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CrossoverOXadaptado extends Crossover{
@@ -10,9 +9,15 @@ public class CrossoverOXadaptado extends Crossover{
 	{
 		super();
 	}
+        
+        @Override
+        public String toString()
+        {
+            return "3";
+        }
 
-	//Adaptação do crossover OX de otimização de rotas
-	// Primeiro ele retira as repeticoes do símbolo de carro (-1) do genotipo,
+	//Adaptaï¿½ï¿½o do crossover OX de otimizaï¿½ï¿½o de rotas
+	// Primeiro ele retira as repeticoes do sï¿½mbolo de carro (-1) do genotipo,
 	// atribuindo a cada carro um valor unico
 	// Depois ele faz o crossover OX tradicional
 	// Depois ele volta os carros ao formato padrao de visualizacao
@@ -82,11 +87,11 @@ public class CrossoverOXadaptado extends Crossover{
 		i = p2+1;
 		while(true)
 		{		
-			//Quando terminar de passar nos pais, começar de novo
+			//Quando terminar de passar nos pais, comeï¿½ar de novo
 			if(i == pai1.length)
 				i = 0;
 			
-			//Quando chegar ao fim, voltar para o começo
+			//Quando chegar ao fim, voltar para o comeï¿½o
 			if(ind1==pai1.length)
 				ind1 = 0;
 			if(ind2==pai1.length)
@@ -103,14 +108,14 @@ public class CrossoverOXadaptado extends Crossover{
 			//Incrementar
 			i++;
 			
-			//Verificar se comecei de novo e cheguei até p2+1
+			//Verificar se comecei de novo e cheguei atï¿½ p2+1
 			//Se sim, sair
 			if(i==p2+1)
 				break;
 		}
 		
 		//Converter os carros novamente -> Pegar todos os carros
-		//que estão como -1, -2, -3... e transformá-los em -1 de novo
+		//que estï¿½o como -1, -2, -3... e transformï¿½-los em -1 de novo
 		for(i = 0; i < pai1.length; i++)
 		{
 			filho1[i] = filho1[i] < 0 ? -1 : filho1[i];

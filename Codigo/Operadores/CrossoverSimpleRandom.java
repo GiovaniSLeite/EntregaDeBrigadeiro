@@ -7,7 +7,13 @@ import java.util.Arrays;
 public class CrossoverSimpleRandom extends Crossover {
 
     double[][] dist;
-
+    @Override
+    public String toString()
+    {
+        return "2";
+    }
+    
+    
     //Para esse metodo sao necessarias as distancias, por conta disso as mesmas sao passadas como parametro
     public CrossoverSimpleRandom(double[][] dist) {
         super();
@@ -17,8 +23,8 @@ public class CrossoverSimpleRandom extends Crossover {
     @Override
     //Crossover simple Random
     //0) Copia o pai 1 para o filho
-    //1) Escolhe uma rota aleatória no pai 2
-    //2) Insere essa rota no pai melhor lugar possível no filho
+    //1) Escolhe uma rota aleatï¿½ria no pai 2
+    //2) Insere essa rota no pai melhor lugar possï¿½vel no filho
     //3) Remove clientes duplicados no filho
     // Retorna o filho
     public int[][] executar(int[] pai1, int[] pai2) {

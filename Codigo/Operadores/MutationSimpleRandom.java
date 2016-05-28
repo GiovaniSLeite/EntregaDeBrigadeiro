@@ -10,7 +10,7 @@ public class MutationSimpleRandom extends Mutacao{
 	double dist[][];
     Random rand;
     //Probabilidade especial de inserir um gene aleat�rio no melhor lugar poss�vel para ele
-    double ProbEspecial;
+    public double ProbEspecial;
     
     public MutationSimpleRandom(double[][] distancias, double prob){    
         rand = new Random();
@@ -18,6 +18,10 @@ public class MutationSimpleRandom extends Mutacao{
         ProbEspecial = prob;
     }
     
+    public String toString(){
+        
+        return "2";
+    }
 
     @Override
     public int[] executar(int[] individuo) {
@@ -36,7 +40,7 @@ public class MutationSimpleRandom extends Mutacao{
                 mutante = Utils.inserirMelhorLugar(mutante, p, dist);
             else
             	//Ou ent�o inserir num lugar aleatorio
-                mutante = Utils.inserirAleatorio(mutante, p, rand.nextInt(individuo.length+1));
+                mutante = Utils.inserirAleatorio(mutante, p, rand.nextInt(mutante.length+1));
         }
             
         return mutante;

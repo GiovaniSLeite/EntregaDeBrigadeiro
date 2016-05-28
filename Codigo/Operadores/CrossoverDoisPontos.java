@@ -1,4 +1,7 @@
 package Operadores;
+
+import java.util.Arrays;
+
 public class CrossoverDoisPontos extends Crossover {
     
     public CrossoverDoisPontos()
