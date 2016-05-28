@@ -65,10 +65,12 @@ public abstract class AlgoritmosGeneticos {
 
     //Probabilidade de mutacao
     protected double probMutacao;
+    protected double probEspecialMutacao;
     
     protected Correcao corretor;
     //Probabilidade de correcao
     protected double probCorrecao;
+    protected double probEspecialCorrecao;
     
     protected RepairingOperator reparador;
     //Probabilidade de repairing
@@ -113,7 +115,7 @@ public abstract class AlgoritmosGeneticos {
     |-----------------*/
     protected abstract double fitness(int[] genotipo);
     protected abstract void calcAlpha();
-    
+    protected abstract int penalizar(int [] genotipo);
     /*-----------------|
     Calcula o fitness total de toda a populacao
     |-----------------*/
@@ -260,13 +262,13 @@ public abstract class AlgoritmosGeneticos {
         boolean convergiu = true; //Boolean para controle de convergencia
         String relatorio =""; //String a ser guardada em arquivo com o relatorio conforme especificado
         //Parametros da execucao
-        relatorio = relatorio + "qtdClientes,qtdRotas,numIndividuos,critParada,numGeracoes,numCross,tipoCrossover,probCrossover,tipoMutacao,probMutacao,critTroca,elitismo\n";
+        relatorio = relatorio + "qtdClientes,qtdRotas,numIndividuos,critParada,numGeracoes,numCross,tipoCrossover,probCrossover,tipoMutacao,probMutacao,probEspecialMutacao,critTroca,elitismo,probCorrecao,probEspecialCorrecao,probReparacao,probOtimizacao\n";
         
         //Impressao dos parametros da execucao
-        System.out.println("qtdClientes\tqtdRotas\tnumIndividuos\tcritParada\tnumGeracoes\tnumCross\ttipoCrossover\tprobCrossover\ttipoMutacao\tprobMutacao\tcritTroca\telitismo\n"
-                +qtdClientes+"\t"+qtdRotas+"\t"+numIndividuos+"\t"+critParada+"\t"+numGeracoes+"\t"+numCross+"\t"+crossover+"\t"+probCrossover+"\t"+mutacao+"\t"+probMutacao+"\t"+critTroca+"\t"+elitismo+"\n");
+        System.out.println("qtdClientes\tqtdRotas\tnumIndividuos\tcritParada\tnumGeracoes\tnumCross\ttipoCrossover\tprobCrossover\ttipoMutacao\tprobMutacao\tprobEspecialMutacao\tcritTroca\telitismo\tprobCorrecao\tprobEspecialCorrecao\tprobReparacao\tprobOtimizacao\n"
+                +qtdClientes+"\t"+qtdRotas+"\t"+numIndividuos+"\t"+critParada+"\t"+numGeracoes+"\t"+numCross+"\t"+crossover+"\t"+probCrossover+"\t"+mutacao+"\t"+probMutacao+"\t"+probEspecialMutacao+"\t"+critTroca+"\t"+elitismo+"\t"+probCorrecao+"\t"+probEspecialCorrecao+"\t"+probReparacao+"\t"+probOtimizacao+"\n");
         relatorio = relatorio+qtdClientes+","+qtdRotas+","+numIndividuos+","+critParada+","+numGeracoes+","+numCross+","+crossover+","
-                +probCrossover+","+mutacao+","+probMutacao+","+critTroca+","+elitismo+"\n\n";
+                +probCrossover+","+mutacao+","+probMutacao+","+probEspecialMutacao+","+critTroca+","+elitismo+","+probCorrecao+","+probEspecialCorrecao+","+probReparacao+","+probOtimizacao+"\n\n";
         
         //Colunas disponiveis no relatorio e na impressao -> Numero da geracao, fitness total da populacao, fitness medio, fitness maximo, fitness minimo
         relatorio = relatorio + "numGeracao,fitness da populacao: total,medio,maximo,minimo\n";
@@ -295,8 +297,7 @@ public abstract class AlgoritmosGeneticos {
             
             //Guarda no relatorio as informacoes da geracao atual/Imprime no console caso seja uma das impressoes que deva ir (baseado no parametro)
             relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+geracao.get(0).fitness+"\n";
-            if(indGeracao%intervaloImpressao==1){ System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
-            System.out.println(getBetter());}
+            if(indGeracao%intervaloImpressao==1) System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
             
             //A evolucao consiste em:
             //0) Geracao de crossovers e mutacoes: m (numCross) tentativas
@@ -395,6 +396,7 @@ public abstract class AlgoritmosGeneticos {
         
         //Imprimir as informacoes da ultima geracao/Guardar no relatorio
         System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
+        System.out.println(getBetter()+"\nPenalizacao do melhor: "+penalizar(getBetter().genotipo));
         relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+geracao.get(0).fitness+"\n";
         //Se nao convergiu, guardar no relatorio
         if(!convergiu) relatorio = relatorio+"NAO CONVERGIU";
@@ -415,7 +417,7 @@ public abstract class AlgoritmosGeneticos {
         //Cria o arquivo
         try {
             BufferedWriter w = new BufferedWriter(new FileWriter(nome+","+qtdClientes+","+qtdRotas+","+numIndividuos+","+critParada+","+numGeracoes+","+numCross+","+crossover+","
-                    +probCrossover+","+mutacao+","+probMutacao+","+critTroca+","+elitismo+".csv"));
+                +probCrossover+","+mutacao+","+probMutacao+","+probEspecialMutacao+","+critTroca+","+elitismo+","+probCorrecao+","+probEspecialCorrecao+","+probReparacao+","+probOtimizacao+".csv"));
             
             w.append(r);
             w.close();
