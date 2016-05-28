@@ -13,23 +13,24 @@ public class Parametrizacao {
         /*Nome da funcao a ser executada*/
         String nomeDaFuncao = "Routes";
         
-        String[] param0 = {"A-n32-k5.vrp"};//0 - nome do arquivo teste
+        String[] param0 = {"A-n80-k10.vrp"};//0 - nome do arquivo teste 32 5
         String[] param1 = {"1", "2", "3"};//1 - ID
-        String[] param2 = {"500", "1000", "10000"};//2 - Numero de individuos
-        String[] param3 = {"0", "1"};//3 - criterio de parada
+        String[] param2 = {"10000"};//2 - Numero de individuos 10000
+        String[] param3 = {"0"};//3 - criterio de parada 0
         String[] param4 = {"100"};//4 - numero de geracoes
-        String[] param5 = {"1", "1.5"};//5 - numero de crossovers
-        String[] param6 = {"0", "1"};//6 - tipo do crossover
-        String[] param7 = {"0.7", "0.9", "1"};//7 - probabilidade do crossover
-        String[] param8 = {"1"};//8 - tipo da mutacao
-        String[] param9 = {"0.05", "0.1"};//9 - probabilidade da mutacao
-        String[] param10 = {"0.5"};//10 - prob especial
-        String[] param11 = {"1"};//11 - criterio de troca
-        String[] param12 = {"true"};//12 - elitismo
-        String[] param13 = {"0"};//13 - prob correcao
-        String[] param14 = {"0"};//14 - prob reparação (caso de capacidade)
-        String[] param15 = {"0"};//15 - prob otimizacao
-        String[] param16 = {"10"};//16 - intervalo de impressao;
+        String[] param5 = {"1"};//5 - numero de crossovers 1
+        String[] param6 = {"1"};//6 - tipo do crossover 1
+        String[] param7 = {"1"};//7 - probabilidade do crossover 1
+        String[] param8 = {"1"};//8 - tipo da mutacao 1
+        String[] param9 = {"0.05"};//9 - probabilidade da mutacao 0.05
+        String[] param10 = {"0.5"};//10 - prob especial mutacao
+        String[] param11 = {"0"};//11 - criterio de troca 0
+        String[] param12 = {"false"};//12 - elitismo 
+        String[] param13 = {"1"};//13 - prob correcao 1
+        String[] param14 = {"0.7"}; //14 probEspecial para correcao
+        String[] param15 = {"1"};//15 - prob reparação (caso de capacidade) 1
+        String[] param16 = {"0"};//16 - prob otimizacao
+        String[] param17 = {"1000"};//17 - intervalo de impressao;
         
         //Diretorio onde estão os .class das funcoes (IDE: pasta bin - Editor de texto: mesma pasta dos .java)
         File Diretorio = new File("C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\build\\classes");
@@ -53,7 +54,8 @@ public class Parametrizacao {
                                                                 for(String p14 : param14)
                                                                     for(String p15 : param15)
                                                                         for(String p16 : param16)
-                                                                            comandos.add("java funcoes." + nomeDaFuncao + " " + p0 + " " + p1 +" "+ p2 +" "+p3 +" "+p4 +" "+p5 +" "+p6 +" "+p7 +" "+p8 +" "+p9 +" "+p10 +" "+p11 +" "+p12 +" "+p13 +" "+p14 +" "+p15 +" "+p16);
+                                                                            for(String p17 : param17)
+                                                                            comandos.add("java funcoes." + nomeDaFuncao + " " + p0 + " " + p1 +" "+ p2 +" "+p3 +" "+p4 +" "+p5 +" "+p6 +" "+p7 +" "+p8 +" "+p9 +" "+p10 +" "+p11 +" "+p12 +" "+p13 +" "+p14 +" "+p15 +" "+p16+" "+p17);
 
         //Comando que eh executado no prompt
         int execucao;

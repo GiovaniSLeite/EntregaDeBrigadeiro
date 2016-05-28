@@ -39,6 +39,7 @@ public class Routes extends AlgoritmosGeneticos {
         15 - prob otimizacao
         16 - intervalo de impressao
         */
+        //args = new String[]{"A-n32-k5.vrp","0","5000","0","100","1","3","1","2","0.05","0.5","1","false","0","1","0.5","5"};
         String arquivoTeste = "C:\\Users\\sousa\\OneDrive\\Documentos\\NetBeansProjects\\EP1IA_2\\A-VRP\\"+args[0];
         int qRotas = Utils.getQtdRotas(arquivoTeste);
         ArrayList<Cliente> aux = Utils.getClientes(arquivoTeste);
@@ -48,20 +49,22 @@ public class Routes extends AlgoritmosGeneticos {
         r.numIndividuos = Integer.parseInt(args[2]);
         r.critParada = Integer.parseInt(args[3]);
         r.numGeracoes = Integer.parseInt(args[4]);
-        r.numCross = Integer.parseInt(args[5])*r.numIndividuos;
+        r.numCross = (int)(Double.parseDouble(args[5])*r.numIndividuos);
         r.crossover = args[6].equals("0") ? new CrossoverUmPonto() : args[6].equals("1") ? new CrossoverDoisPontos() : args[6].equals("2") ? new CrossoverSimpleRandom(r.mapaDistancias) : new CrossoverOXadaptado();
         r.probCrossover = Double.parseDouble(args[7]);
-        r.mutacao = args[8].equals("0") ? new MutacaoSimples() : args[8].equals("1") ? new MutacaoTroca() : new MutationSimpleRandom(r.mapaDistancias, Double.parseDouble(args[10]));
+        r.probEspecialMutacao = Double.parseDouble(args[10]);
+        r.mutacao = args[8].equals("0") ? new MutacaoSimples() : args[8].equals("1") ? new MutacaoTroca() : new MutationSimpleRandom(r.mapaDistancias, r.probEspecialMutacao);
         r.probMutacao = Double.parseDouble(args[9]);
         r.critTroca = Integer.parseInt(args[11]);
         r.elitismo = args[12].equals("true");
-        r.corretor = new Correcao(r.mapaDistancias);
+        r.probEspecialCorrecao = Double.parseDouble(args[14]);
+        r.corretor = new Correcao(r.mapaDistancias, r.probEspecialCorrecao);
         r.probCorrecao = Double.parseDouble(args[13]);
         r.reparador = new RepairingOperator();
-        r.probReparacao = Double.parseDouble(args[14]);
+        r.probReparacao = Double.parseDouble(args[15]);
         r.otimizador = new Otimizacao(r.mapaDistancias);
-        r.probOtimizacao = Double.parseDouble(args[15]);
-        r.intervaloImpressao = Integer.parseInt(args[16]);
+        r.probOtimizacao = Double.parseDouble(args[16]);
+        r.intervaloImpressao = Integer.parseInt(args[17]);
         
         r.evolucao();
         
