@@ -59,7 +59,7 @@ public class Correcao {
         Collections.shuffle(clientesFaltantes);
         //Para cada cliente faltante, inserir no melhor lugar poss�vel
         for(Integer cl : clientesFaltantes)
-            if(probEspecial <= rand.nextDouble())
+            if(probEspecial < rand.nextDouble())
                 genotipo = Utils.inserirAleatorio(genotipo, cl, rand.nextInt(genotipo.length+1)); 
             else genotipo = Utils.inserirMelhorLugar(genotipo, cl, dist);
      
