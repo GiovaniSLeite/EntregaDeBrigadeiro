@@ -13,23 +13,23 @@ public class Parametrizacao {
         /*Nome da funcao a ser executada*/
         String nomeDaFuncao = "Routes";
         
-        String[] param0 = {"A-n80-k10.vrp"};//0 - nome do arquivo teste 32 5
+        String[] param0 = {"A-n32-k5.vrp"};//0 - nome do arquivo teste 32 5
         String[] param1 = {"1", "2", "3"};//1 - ID
-        String[] param2 = {"10000"};//2 - Numero de individuos 10000
+        String[] param2 = {"100", "1000", "10000"};//2 - Numero de individuos 10000
         String[] param3 = {"0"};//3 - criterio de parada 0
         String[] param4 = {"100"};//4 - numero de geracoes
-        String[] param5 = {"1"};//5 - numero de crossovers 1
-        String[] param6 = {"1"};//6 - tipo do crossover 1
-        String[] param7 = {"1"};//7 - probabilidade do crossover 1
+        String[] param5 = {"1", "1.5"};//5 - numero de crossovers 1
+        String[] param6 = {"0", "1"};//6 - tipo do crossover 1
+        String[] param7 = {"0.9", "1.0"};//7 - probabilidade do crossover 1
         String[] param8 = {"1"};//8 - tipo da mutacao 1
         String[] param9 = {"0.05"};//9 - probabilidade da mutacao 0.05
         String[] param10 = {"0.5"};//10 - prob especial mutacao
-        String[] param11 = {"0"};//11 - criterio de troca 0
-        String[] param12 = {"false"};//12 - elitismo 
+        String[] param11 = {"0", "1"};//11 - criterio de troca 0
+        String[] param12 = {"true", "false"};//12 - elitismo 
         String[] param13 = {"1"};//13 - prob correcao 1
-        String[] param14 = {"0.7"}; //14 probEspecial para correcao
-        String[] param15 = {"1"};//15 - prob reparação (caso de capacidade) 1
-        String[] param16 = {"0"};//16 - prob otimizacao
+        String[] param14 = {"0.7", "0.9", "1"}; //14 probEspecial para correcao
+        String[] param15 = {"0.5", "0.75", "1"};//15 - prob reparação (caso de capacidade) 1
+        String[] param16 = {"0.5", "0.75", "1"};//16 - prob otimizacao
         String[] param17 = {"1000"};//17 - intervalo de impressao;
         
         //Diretorio onde estão os .class das funcoes (IDE: pasta bin - Editor de texto: mesma pasta dos .java)
@@ -48,18 +48,27 @@ public class Parametrizacao {
                                         for(String p8 : param8)
                                             for(String p9 : param9)
                                                 for(String p10 : param10)
-                                                    for(String p11 : param11)
-                                                        for(String p12 : param12)
-                                                            for(String p13 : param13)
-                                                                for(String p14 : param14)
-                                                                    for(String p15 : param15)
-                                                                        for(String p16 : param16)
-                                                                            for(String p17 : param17)
-                                                                            comandos.add("java funcoes." + nomeDaFuncao + " " + p0 + " " + p1 +" "+ p2 +" "+p3 +" "+p4 +" "+p5 +" "+p6 +" "+p7 +" "+p8 +" "+p9 +" "+p10 +" "+p11 +" "+p12 +" "+p13 +" "+p14 +" "+p15 +" "+p16+" "+p17);
-
+                                                    for(String p11 : param11)  
+                                                            if(p11.equalsIgnoreCase("1")){
+                                                                for(String p13 : param13)
+                                                                    for(String p14 : param14)
+                                                                        for(String p15 : param15)
+                                                                            for(String p16 : param16)
+                                                                                for(String p17 : param17)
+                                                                                    comandos.add("java funcoes." + nomeDaFuncao + " " + p0 + " " + p1 +" "+ p2 +" "+p3 +" "+p4 +" "+p5 +" "+p6 +" "+p7 +" "+p8 +" "+p9 +" "+p10 +" "+p11 +" false "+p13 +" "+p14 +" "+p15 +" "+p16+" "+p17);
+                                                        }else
+                                                            for(String p12 : param12)
+                                                                for(String p13 : param13)
+                                                                    for(String p14 : param14)
+                                                                        for(String p15 : param15)
+                                                                            for(String p16 : param16)
+                                                                                for(String p17 : param17)
+                                                                                    comandos.add("java funcoes." + nomeDaFuncao + " " + p0 + " " + p1 +" "+ p2 +" "+p3 +" "+p4 +" "+p5 +" "+p6 +" "+p7 +" "+p8 +" "+p9 +" "+p10 +" "+p11 +" "+p12 +" "+p13 +" "+p14 +" "+p15 +" "+p16+" "+p17);
+                                                                
         //Comando que eh executado no prompt
         int execucao;
-        for (execucao = 0; execucao < comandos.size(); execucao++) {
+        System.out.println(comandos.size());
+        for (execucao = 0; execucao <= comandos.size(); execucao++) {
             try {
                 String cmd = comandos.get(execucao);
                 System.out.println("EXECUCAO " + execucao + "\n" + cmd);
