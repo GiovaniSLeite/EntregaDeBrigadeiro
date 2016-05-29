@@ -271,8 +271,8 @@ public abstract class AlgoritmosGeneticos {
                 +probCrossover+","+mutacao+","+probMutacao+","+probEspecialMutacao+","+critTroca+","+elitismo+","+probCorrecao+","+probEspecialCorrecao+","+probReparacao+","+probOtimizacao+"\n\n";
         
         //Colunas disponiveis no relatorio e na impressao -> Numero da geracao, fitness total da populacao, fitness medio, fitness maximo, fitness minimo
-        relatorio = relatorio + "numGeracao,fitness da populacao: total,medio,maximo,minimo\n";
-        System.out.println("numGeracao\tfitness da populacao: total\tmedio\tmaximo\tminimo");
+        relatorio = relatorio + "numGeracao,fitness da populacao: total,medio,maximo,overcapacityDoMaximo,minimo,overcapacityDoMinimo\n";
+        System.out.println("numGeracao\tfitness da populacao: total\tmedio\tmaximo\tovercapacityDoMaximo\tminimo\tovercapacityDoMinimo");
         
         List<Individuo> proxFilhos = new ArrayList(); //Lista para guardar os proximos filhos
         
@@ -296,8 +296,8 @@ public abstract class AlgoritmosGeneticos {
             this.fitnessTotal = this.fitnessTotal(); 
             
             //Guarda no relatorio as informacoes da geracao atual/Imprime no console caso seja uma das impressoes que deva ir (baseado no parametro)
-            relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+geracao.get(0).fitness+"\n";
-            if(indGeracao%intervaloImpressao==1) System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
+            relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+penalizar(geracao.get(geracao.size()-1).genotipo)+","+geracao.get(0).fitness+","+penalizar(geracao.get(0).genotipo)+"\n";
+            if(indGeracao%intervaloImpressao==1) System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+penalizar(geracao.get(geracao.size()-1).genotipo)+"\t"+geracao.get(0).fitness+"\t"+penalizar(geracao.get(0).genotipo));
             
             //A evolucao consiste em:
             //0) Geracao de crossovers e mutacoes: m (numCross) tentativas
@@ -353,7 +353,7 @@ public abstract class AlgoritmosGeneticos {
                 
             } else //Se for aplicada troca com substituicao de populacao, verificar se vai ser aplicado elitismo
              if (this.elitismo) {
-                    proxFilhos.add(this.getBetter());
+                    proxFilhos.add(new Individuo(this.getBetter().genotipo, fitness(this.getBetter().genotipo)));
                 }
             
             //Nota: por uma questao simples, nao se aplica elitismo quando nao ha substituicao de populacao
@@ -394,10 +394,10 @@ public abstract class AlgoritmosGeneticos {
             proxFilhos.clear();
         }
         
-        //Imprimir as informacoes da ultima geracao/Guardar no relatorio
-        System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+geracao.get(0).fitness);
-        System.out.println(getBetter()+"\nPenalizacao do melhor: "+penalizar(getBetter().genotipo));
-        relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+geracao.get(0).fitness+"\n";
+        //Imprimir as informacoes ultima geracao/Guardar no relatorio
+        relatorio = relatorio+ indGeracao+","+fitnessTotal+","+(fitnessTotal/geracao.size())+","+geracao.get(geracao.size()-1).fitness+","+penalizar(geracao.get(geracao.size()-1).genotipo)+","+geracao.get(0).fitness+","+penalizar(geracao.get(0).genotipo)+"\n"+geracao.get(0)+"\n";
+            System.out.println(indGeracao+"\t"+fitnessTotal+"\t"+(fitnessTotal/geracao.size())+"\t"+geracao.get(geracao.size()-1).fitness+"\t"+penalizar(geracao.get(geracao.size()-1).genotipo)+"\t"+geracao.get(0).fitness+"\t"+penalizar(geracao.get(0).genotipo));
+            System.out.println(geracao.get(0));
         //Se nao convergiu, guardar no relatorio
         if(!convergiu) relatorio = relatorio+"NAO CONVERGIU";
         
