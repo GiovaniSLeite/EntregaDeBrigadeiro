@@ -169,19 +169,33 @@ public class Utils {
         return novoGenotipo;          
     }
     
-    //Procura o melhor lugar para inserir esse filho
-    //Para cada espaco entre um cliente a e outro b de cada rota,
-    //verifica se eh um bom lugar para inserir a subrota do pai2
-    //O melhor lugar eh o com maior PayOff
-    //PayOff = distancia entre a e b - a distancia entre a e o primeiro da subrota do pai2 - distancia entre b e o ultimo da subrota do pai2 
+    
+    /*AQUI DECIO*/
+    /*
+        Funcao para inserirMelhorLugar (Retirado de master thesis 2004)
+        Recebe
+            Um genotipo a (incompleto, sem os clientes da subrota s)
+            Uma subrota s
+            Uma matriz informando a distancia entre os clientes e o deposito, todos x todos
+        Retorna
+            O genotipo contendo a subrota s no melhor lugar possivel
+            
+    */
     public static int[] InserirMelhorLugar(int[] filho, ArrayList<Integer> subrota2, double[][] dist)
     {
         int DEPOSITO = 0;
+        
+        /*Faz uma copia do filho*/
     	int[] filhoAdaptado = Arrays.copyOf(filho, filho.length);
+        
+        /*Muda a representacao dos carros para 1*/
         for(int i = 0; i < filhoAdaptado.length; i++)
             if(filhoAdaptado[i] == -1) filhoAdaptado[i] = 1;
         
-        //distancias
+        /*PayOff = a distancia entre duas partes de a (deposito e cliente, cliente e cliente ou cliente deposito em alguma das subrotas de a)
+             - a distancia entre a parte 1 e o primeiro da subrota s - a distancia entre o ultimo da subrota s e a segunda parte de a*/
+        
+        /*Calcula o payoff para adicionar a subrota no comeco do genotipo e no final*/
         double entreDepositoEPrimeiro = dist[DEPOSITO][filhoAdaptado[0]-1] - dist[DEPOSITO][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filhoAdaptado[0]-1];
         double entreUltimoEDeposito = dist[filhoAdaptado[filhoAdaptado.length-1]-1][DEPOSITO] - dist[filhoAdaptado[filhoAdaptado.length-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][DEPOSITO];
         
@@ -197,6 +211,7 @@ public class Utils {
             ondeInserir = filhoAdaptado.length;
         }
         
+        /*Percorre o genotipo calculando os payOffs*/
         for(int i = 1; i < filhoAdaptado.length; i++)
         {
             double payOff = dist[filhoAdaptado[i-1]-1][filhoAdaptado[i]-1] - dist[filhoAdaptado[i-1]-1][subrota2.get(0)-1] - dist[subrota2.get(subrota2.size()-1)-1][filhoAdaptado[i]-1];
@@ -208,26 +223,24 @@ public class Utils {
             }
         }
         
+        /*Compoe o genotipo a ser retornado inserindo a subrota s no melhor lugar*/
         int[] novoFilho = new int[filho.length + subrota2.size()];
             
-            //As partes do filho sem os clientes da subrota do pai 2
             for(int i =0; i < ondeInserir; i++)
                 novoFilho[i] = filho[i];
 
             int indice = ondeInserir;
             
-            //A subrota do pai 2 inserida no melhor lugar
             for(int aux : subrota2)
                 novoFilho[indice++] = aux;
 
-            //O restante que compoe o filho
             for(int i = indice; i < novoFilho.length; i++)
                 novoFilho[i] = filho[i-subrota2.size()];
             
             return novoFilho;
     }
     
-    //Mesmo esquema acima, so que inserindo um unico cliente
+    /*Calcula o melhor lugar para um cliente ser inserido e retorna o genotipo, agora, com esse cliente*/
     public static int[] inserirMelhorLugar(int[] filho, int cliente, double[][] dist)
     {
     	//Iniciaizacao de variaveis
@@ -325,21 +338,7 @@ public class Utils {
         return rotas;
     }
     
-    //boundingBox -> Retorna o menor retangulo que contem todos os pontos da subrota passada
-    //Fecho convexo retangular
-    public static Rectangle boundingBox(ArrayList<Integer> subrota, ArrayList<Cliente> clientes)
-    {
-        int[] x = new int[subrota.size()+1];
-        int[] y = new int[subrota.size()+1];
-        x[0] = clientes.get(0).x;
-        y[0] = clientes.get(0).y;
-        for(int i = 1; i < x.length; i++)
-        {
-            x[i] = clientes.get(subrota.get(i-1)-1).x;
-            y[i] = clientes.get(subrota.get(i-1)-1).y;
-        }       
-        return new Polygon(x, y, x.length).getBounds();
-    }
+    
     
     //Metodo que converte uma lista de listas de clientes em um genotipo
     public static int[] converteListasEmGenotipo(ArrayList<ArrayList<Integer>> rotas)
