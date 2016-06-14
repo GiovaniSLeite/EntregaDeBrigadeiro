@@ -68,57 +68,87 @@ public class Routes extends AlgoritmosGeneticos {
         
         r.evolucao();
         
+        
     }
     
+    
+    /*
+        Funcao fitness
+        Recebe um genotipo e retorna sua avaliacao
+    */
+    @Override
     protected double fitness(int[] genotipo)
     {
+        /*A distancia percorrida inicial eh 0
+        o ponto de partida (anterior) eh -1, o que simboliza o deposito
+        o atual sera atribuido posteriormente*/
     	double distanciaPercorrida = 0;
     	int anterior = -1;
-    	int atual = 0;
+    	int atual;
     	
+        /*Percorre o genotipo*/
     	for(int i = 0; i < genotipo.length; i++)
-    	{
+    	{       /*Se for -1, chegou ao final de uma rota/a volta ao deposito*/
     		if(genotipo[i] == -1)
     		{
-    			if(anterior!=-1)
-    			{
-    				distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
-    				anterior = -1;
-    			}
+                    /*Caso nao seja uma rota vazia*/
+                    if(anterior!=-1)
+                    {
+                        /*eh somada a volta ao deposito
+                        e o anterior eh sinalizado como deposito*/
+                        distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
+                        anterior = -1;
+                    }
     		}
     		else
     		{
-    			atual = genotipo[i]-1;
-                        
-    			if(anterior==-1)
-    			{
-    				distanciaPercorrida += this.mapaDistancias[DEPOSITO][atual];
-    				anterior = atual;
-    			}
-    			else
-    			{
-                                    distanciaPercorrida += this.mapaDistancias[anterior][atual];
-                                    anterior = atual;       
-    			}
+                    /*Caso seja um cliente, o atual recebe o numero equivalente a este na lista de clientes*/
+                    atual = genotipo[i]-1;
+                    /*Caso seja inicio da rota*/
+                    if(anterior==-1)
+                    {
+                        /*Eh somada a distancia do deposito ate o atual*/
+                        distanciaPercorrida += this.mapaDistancias[DEPOSITO][atual];
+                        anterior = atual;
+                    }/*Caso seja meio da rota*/
+                    else
+                    {
+                        /*Eh somada a distancia do cliente anterior ate o atual*/
+                        distanciaPercorrida += this.mapaDistancias[anterior][atual];
+                        anterior = atual;       
+                    }
     		}
     	}
-    	
+    	/*Se a ultima rota nao for vazia: acrescenta a distancia do ultimo ate o deposito*/
     	if (genotipo[genotipo.length-1] != -1 && anterior != -1)
     		distanciaPercorrida += this.mapaDistancias[anterior][DEPOSITO];
-    	//System.out.println("PENANDO: " + ((double)this.indGeracao/this.IT)*this.alpha + " "+ penalizar(genotipo));
+    	
+        /*Retorna a distância somada a penalizacao*/
     	return distanciaPercorrida+ ((double)this.indGeracao/this.IT)*this.alpha*penalizar(genotipo);
     }
     
+    
+    /*
+        Funcao penalizar
+        Recebe um genotipo
+        Retorna a soma dos estouros de capacidade das subrotas
+    */
+    @Override
     public int penalizar(int [] genotipo)
     {
+        /*Divide o genotipo em sub-rotas*/
         ArrayList<ArrayList<Integer>> rotas = Utils.getRotas(genotipo);
         
+        /*Calcula o estouro de capacidade para cada um deles e acrescenta a penalizacao*/
         int penalizacao = 0;
         for(ArrayList<Integer> clientesAtendidos : rotas)
         {
+            /*Inicia penalizacaoLocas com o oposto da capacidade*/
             int penalizacaoLocal = -capacidade;
+            /*soma a demanda dessa subrota a penalizacaoLocal*/
             for(Integer cliAtendido : clientesAtendidos)
                 penalizacaoLocal+= clientes.get(cliAtendido-1).demanda;
+            /*Se ela for maior que 0, ocorrou um estouro da capacidade, entao soma a penalizacao*/
             if(penalizacaoLocal>0)
                 penalizacao+=penalizacaoLocal;
         }
@@ -127,6 +157,13 @@ public class Routes extends AlgoritmosGeneticos {
         
     }
     
+    /*
+        Funcao alpha
+        Essa funcao teve como base:
+            Solving the Vehicle Routing Problem with Genetic Algorithms (Master thesis 2004)
+            Aslaug Soley Bjarnadottir
+        Calcula o peso dado ao estouro de capacidade  
+    */
     public void calcAlpha()
     {
         double mnv = (double) Utils.demandaTotal(clientes)/capacidade;
