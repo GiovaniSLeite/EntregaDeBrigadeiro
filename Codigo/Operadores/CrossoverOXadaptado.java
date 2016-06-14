@@ -16,11 +16,13 @@ public class CrossoverOXadaptado extends Crossover{
             return "3";
         }
 
-	//Adapta��o do crossover OX de otimiza��o de rotas
-	// Primeiro ele retira as repeticoes do s�mbolo de carro (-1) do genotipo,
-	// atribuindo a cada carro um valor unico
-	// Depois ele faz o crossover OX tradicional
-	// Depois ele volta os carros ao formato padrao de visualizacao
+        
+        /*
+            Operador de cruzamento 4: Crossover OX Adaptado
+                Retira os simbolos de carro (-1) do genotipo, atribui a cada carro um valor unico
+                Faz o crossover OX tradicional
+                Volta os carros ao padrao tradicional
+        */
 	public int[][] executar(int[] pai, int[] mae) {
 		//1) Representar os carros de maneira diferente
 		// Isso significa mudar a representacao de cada carro, de -1 pra outro valor

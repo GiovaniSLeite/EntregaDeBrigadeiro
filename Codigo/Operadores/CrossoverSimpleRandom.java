@@ -21,17 +21,16 @@ public class CrossoverSimpleRandom extends Crossover {
     }
 
     @Override
-    //Crossover simple Random
-    //0) Copia o pai 1 para o filho
-    //1) Escolhe uma rota aleat�ria no pai 2
-    //2) Insere essa rota no pai melhor lugar poss�vel no filho
-    //3) Remove clientes duplicados no filho
-    // Retorna o filho
+    
+    /*
+        Operador de cruzamento 3: Simple Random Crossover
+            Copia o pai 1 para o filho, escolhe uma subrota aleatoria s do pai 2
+            Remove os clientes do filho que estejam em s, insere s no melhor lugar no filho.
+    */
     public int[][] executar(int[] pai1, int[] pai2) {
 
-        //Filho recebe pai1
+        /*Filho recebe pai1*/
         int[] filho = Arrays.copyOf(pai1, pai1.length);
-        
 
         //Escolhe uma subrota do pai2
         ArrayList<Integer> subrota2 = algoritmoGenetico.Utils.encontraRota(pai2, rand.nextInt(pai2.length));
